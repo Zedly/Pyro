@@ -11,12 +11,10 @@ import org.bukkit.inventory.meta.*;
 
 public class CraftingGUI {
 
-    private static boolean chromaCraftingEnabled = false;
-
     // Chomatic Armor Crafting *DISABLED*
     public static void craftChromo(final InventoryView view, final Set<Integer> slots, final Player p,
             final boolean canCraft) {
-        if (!isChromaCraftingEnabled()) {
+        if (!Storage.recipes.get("Chromatic Armor")) {
             return;
         }
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.pyro, new Runnable() {
@@ -55,17 +53,19 @@ public class CraftingGUI {
                                     }
                                 }
                             }
-                        } else if (ArrayUtils.contains(accepted, view.getItem(i).getType())) {
-                            if (view.getItem(i).getType().equals(WATER_BUCKET)) {
-                                bucket = i;
-                            } else if (view.getItem(i).getType().equals(SPONGE)) {
-                                sponge = i;
-                                spongeAmount = view.getItem(i).getAmount();
-                            }
-                            mats.add(view.getItem(i).getType());
-                            infos.add((int) view.getItem(i).getData().getData());
                         } else {
-                            return;
+                            if (ArrayUtils.contains(accepted, view.getItem(i).getType())) {
+                                if (view.getItem(i).getType().equals(WATER_BUCKET)) {
+                                    bucket = i;
+                                } else if (view.getItem(i).getType().equals(SPONGE)) {
+                                    sponge = i;
+                                    spongeAmount = view.getItem(i).getAmount();
+                                }
+                                mats.add(view.getItem(i).getType());
+                                infos.add((int) view.getItem(i).getData().getData());
+                            } else {
+                                return;
+                            }
                         }
                     }
                 }
@@ -89,30 +89,32 @@ public class CraftingGUI {
                         if (sameI && sameD) {
                             type = "color";
                             color = 15 - infos.get(0);
-                        } else if (notInk == 1) {
-                            if (mats.contains(PRISMARINE_SHARD)) {
-                                infos.remove(mats.lastIndexOf(PRISMARINE_SHARD));
-                                mats.remove(mats.lastIndexOf(PRISMARINE_SHARD));
-                                if (infos.contains(1) && infos.contains(2) && infos.contains(4)) {
-                                    type = "normal";
-                                }
-                            } else if (mats.contains(GLOWSTONE_DUST)) {
-                                infos.remove(mats.lastIndexOf(GLOWSTONE_DUST));
-                                mats.remove(mats.lastIndexOf(GLOWSTONE_DUST));
-                                if (infos.contains(1) && infos.contains(2) && infos.contains(4)) {
-                                    type = "bright";
-                                }
-                            } else if (mats.contains(QUARTZ)) {
-                                infos.remove(mats.lastIndexOf(QUARTZ));
-                                mats.remove(mats.lastIndexOf(QUARTZ));
-                                if (infos.contains(1) && infos.contains(2) && infos.contains(4)) {
-                                    type = "pastel";
-                                }
-                            } else if (mats.contains(FLINT)) {
-                                infos.remove(mats.lastIndexOf(FLINT));
-                                mats.remove(mats.lastIndexOf(FLINT));
-                                if (infos.contains(8) && infos.contains(7) && infos.contains(15)) {
-                                    type = "grayscale";
+                        } else {
+                            if (notInk == 1) {
+                                if (mats.contains(PRISMARINE_SHARD)) {
+                                    infos.remove(mats.lastIndexOf(PRISMARINE_SHARD));
+                                    mats.remove(mats.lastIndexOf(PRISMARINE_SHARD));
+                                    if (infos.contains(1) && infos.contains(2) && infos.contains(4)) {
+                                        type = "normal";
+                                    }
+                                } else if (mats.contains(GLOWSTONE_DUST)) {
+                                    infos.remove(mats.lastIndexOf(GLOWSTONE_DUST));
+                                    mats.remove(mats.lastIndexOf(GLOWSTONE_DUST));
+                                    if (infos.contains(1) && infos.contains(2) && infos.contains(4)) {
+                                        type = "bright";
+                                    }
+                                } else if (mats.contains(QUARTZ)) {
+                                    infos.remove(mats.lastIndexOf(QUARTZ));
+                                    mats.remove(mats.lastIndexOf(QUARTZ));
+                                    if (infos.contains(1) && infos.contains(2) && infos.contains(4)) {
+                                        type = "pastel";
+                                    }
+                                } else if (mats.contains(FLINT)) {
+                                    infos.remove(mats.lastIndexOf(FLINT));
+                                    mats.remove(mats.lastIndexOf(FLINT));
+                                    if (infos.contains(8) && infos.contains(7) && infos.contains(15)) {
+                                        type = "grayscale";
+                                    }
                                 }
                             }
                         }
@@ -121,33 +123,35 @@ public class CraftingGUI {
                     if (mats.size() == 2 && mats.contains(WATER_BUCKET) && mats.contains(SPONGE)) {
                         washed = true;
                         type = "not configured";
-                    } else if (!type.equals("not configured")) {
-                        try {
-                            if (ArrayUtils.contains(Storage.colors, type.replace(" ", "_"))) {
-                                color = ArrayUtils.indexOf(Storage.colors, type.replace(" ", "_"));
-                                speed = Integer.parseInt(args[0]);
-                                offset = Integer.parseInt(args[9]);
-                                type = "color";
-                            } else {
-                                speed = Integer.parseInt(args[8]);
-                                offset = Integer.parseInt(args[7]);
+                    } else {
+                        if (!type.equals("not configured")) {
+                            try {
+                                if (ArrayUtils.contains(Storage.colors, type.replace(" ", "_"))) {
+                                    color = ArrayUtils.indexOf(Storage.colors, type.replace(" ", "_"));
+                                    speed = Integer.parseInt(args[0]);
+                                    offset = Integer.parseInt(args[9]);
+                                    type = "color";
+                                } else {
+                                    speed = Integer.parseInt(args[8]);
+                                    offset = Integer.parseInt(args[7]);
+                                }
+                            } catch (NumberFormatException e) {
                             }
-                        } catch (NumberFormatException e) {
-                        }
-                        for (Material mat : mats) {
-                            switch (mat) {
-                                case SULPHUR:
-                                    speed--;
-                                    break;
-                                case SUGAR:
-                                    speed++;
-                                    break;
-                                case REDSTONE:
-                                    offset -= 5;
-                                    break;
-                                case GLOWSTONE_DUST:
-                                    offset += 5;
-                                    break;
+                            for (Material mat : mats) {
+                                switch (mat) {
+                                    case SULPHUR:
+                                        speed--;
+                                        break;
+                                    case SUGAR:
+                                        speed++;
+                                        break;
+                                    case REDSTONE:
+                                        offset -= 5;
+                                        break;
+                                    case GLOWSTONE_DUST:
+                                        offset += 5;
+                                        break;
+                                }
                             }
                         }
                     }
@@ -191,7 +195,7 @@ public class CraftingGUI {
                     }
                     meta.setLore(lore);
                     finalArmor.setItemMeta(meta);
-
+                    
                     view.setItem(0, finalArmor);
                     if (slots.size() == 1 && slots.contains(0) && canCraft) {
                         for (int i1 = 1; i1 < 10; i1++) {
@@ -791,20 +795,6 @@ public class CraftingGUI {
                 break;
         }
         updatePage(page, player);
-    }
-
-    /**
-     * @return the chromaCraftingEnabled
-     */
-    public static boolean isChromaCraftingEnabled() {
-        return chromaCraftingEnabled;
-    }
-
-    /**
-     * @param aChromaCraftingEnabled the chromaCraftingEnabled to set
-     */
-    public static void setChromaCraftingEnabled(boolean aChromaCraftingEnabled) {
-        chromaCraftingEnabled = aChromaCraftingEnabled;
     }
 
 }
