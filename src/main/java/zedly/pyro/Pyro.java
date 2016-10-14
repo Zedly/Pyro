@@ -32,6 +32,8 @@ public class Pyro extends JavaPlugin {
         Storage.fep = new FireworkEffectPlayer(this);
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new HFEffects(), 0, 1);
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new MFEffects(), 0, 10);
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, new TaskItemTrails(), 0, 10);
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, new TaskChromaticArmor(), 0, 10);
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new PlayParty(), 0, 3);
         String col = ChatColor.GOLD + "Colors: " + ChatColor.YELLOW + "";
         for (int i = 0; i < Storage.colors.length; i++) {

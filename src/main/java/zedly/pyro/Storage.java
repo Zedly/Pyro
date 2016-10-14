@@ -34,7 +34,6 @@ public class Storage {
     new int[]{59, 81, 26}, new int[]{179, 49, 44}, new int[]{30, 27, 27}};
 
     //Collections
-    public static final HashMap<Player, Location> playerLocations = new HashMap<>();
     public static final HashMap<String, Boolean> recipes = new HashMap<>();
     public static final HashSet<Snowball> bangBalls = new HashSet<>();
     public static final HashMap<Integer, TNTExplosion> explodingEntities = new HashMap<>();
@@ -46,9 +45,7 @@ public class Storage {
     public static final HashMap<Item, ItemStack> eastereggs = new HashMap<>();
     public static final HashSet<Entity> snowballs = new HashSet<>();
     public static final HashMap<Block, Long> rainbowBlocks = new HashMap<>();
-    public static final HashSet<Item> dropItem = new HashSet<>();
     public static final HashMap<Location, String> dispenserProj = new HashMap<>();
-    public static final HashMap<Player, Integer> chromoPlayers = new HashMap<>();
     public static final HashMap<Projectile, Integer[]> colorArrows = new HashMap<>();
     public static final HashSet<Player> partyPlayers = new HashSet<>();
     public static final HashMap<Player, CraftedFirework> inventories = new HashMap<>();
