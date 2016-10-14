@@ -86,6 +86,7 @@ public class CommandProcessor {
     private static void trl(Player player, String[] args) {
         String[] trlList = new String[]{"custom", "mineral", "color", "flower"};
         ArrayList<String> trails = new ArrayList<>();
+        ArrayList<String> notTrails = new ArrayList<>();
         List<String> lore = player.getItemInHand().getItemMeta().getLore();
         HashSet<String> oldItems = new HashSet<>();
         HashSet<String> newItems = new HashSet<>();
@@ -93,17 +94,21 @@ public class CommandProcessor {
             for (String s : lore) {
                 if (ArrayUtils.contains(trlList, ChatColor.stripColor(s.toLowerCase().replace(" trail", "")))) {
                     trails.add(ChatColor.stripColor(s.toLowerCase().replace(" trail", "")));
-                }
-            }
-        }
-        if (lore != null) {
-            for (String s : lore) {
-                Material m = Material.matchMaterial(ChatColor.stripColor(s.split(":")[0].toUpperCase().replace(" ", "_")));//
-                if (m != AIR && m != null && !ArrayUtils.contains(Storage.badIds, m.getId())) {
-                    if (s.contains(":")) {
-                        int i = Integer.parseInt(ChatColor.stripColor(s.split(":")[1]));
-                        oldItems.add(m + ":" + i);
+                } else {
+                    String[] itemData = s.split(":");
+                    if (itemData.length <= 2) {
+                        Material m = Material.matchMaterial(ChatColor.stripColor(itemData[0].toUpperCase().replace(" ", "_")));//
+                        if (m != null) {
+                            if (m != Material.AIR && !ArrayUtils.contains(Storage.badIds, m.getId())) {
+                                if (itemData.length == 2) {
+                                    int i = Integer.parseInt(ChatColor.stripColor(s.split(":")[1]));
+                                    oldItems.add(m + ":" + i);
+                                }
+                            }
+                            continue;
+                        }
                     }
+                    notTrails.add(s);
                 }
             }
         }
@@ -150,6 +155,7 @@ public class CommandProcessor {
             trails.add("custom");
         }
         List<String> newLore = new ArrayList<>();
+        newLore.addAll(notTrails);
         for (String trl : trails) {
             newLore.add(ChatColor.GOLD + WordUtils.capitalize(trl) + " Trail");
         }
