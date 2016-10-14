@@ -146,10 +146,8 @@ public class CommandProcessor {
         }
         if (oldItems.isEmpty()) {
             trails.remove("custom");
-        } else {
-            if (!trails.contains("custom")) {
-                trails.add("custom");
-            }
+        } else if (!trails.contains("custom")) {
+            trails.add("custom");
         }
         List<String> newLore = new ArrayList<>();
         for (String trl : trails) {
@@ -313,10 +311,8 @@ public class CommandProcessor {
                 if (mat == DIAMOND_CHESTPLATE || mat == IRON_CHESTPLATE || mat == CHAINMAIL_CHESTPLATE
                         || mat == GOLD_CHESTPLATE || mat == LEATHER_CHESTPLATE) {
                     ItemMeta meta = player.getItemInHand().getItemMeta();
-                    if ("add".equalsIgnoreCase(args[0]) || "del".equalsIgnoreCase(args[0])) {
-                        if (args.length > 1) {
-                            trl(player, args);
-                        }
+                    if ("add".equalsIgnoreCase(args[0]) || "del".equalsIgnoreCase(args[0]) && args.length > 1) {
+                        trl(player, args);
                     } else if ("list".equalsIgnoreCase(args[0])) {
                         player.sendMessage(Storage.logo + " Trails:\nFlower\nColor\nMineral\nCustom");
                     }

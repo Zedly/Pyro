@@ -35,11 +35,10 @@ public class TaskChromaticArmor implements Runnable {
         for (Player player : Bukkit.getServer().getOnlinePlayers()) {
             int entityId = player.getEntityId();
             int counter = 0;
-            if(chromaticColorProgress.containsKey(player.getEntityId())) {
+            if (chromaticColorProgress.containsKey(entityId)) {
                 counter = chromaticColorProgress.get(entityId);
-            } else {
-                chromaticColorProgress.put(entityId, 0);
             }
+            chromaticColorProgress.put(entityId, counter + 1);
             for (ItemStack stk : player.getInventory().getArmorContents()) {
                 if (stk != null && stk.hasItemMeta() && stk.getItemMeta().hasLore()
                         && stk.getItemMeta().getLore().size() > 1) {
@@ -50,6 +49,7 @@ public class TaskChromaticArmor implements Runnable {
                             LeatherArmorMeta meta = (LeatherArmorMeta) stk.getItemMeta();
                             int[] color;
                             try {
+                                //TODO: Cache this
                                 double[] params = Utilities.parseParameters(ChatColor.stripColor(lore.get(1)));
                                 if (ArrayUtils.contains(Storage.colors, ChatColor.stripColor(lore.get(0).toLowerCase().split(": ")[1].replace(" ", "_")))) {
                                     color = Utilities.getThemedColor(params, counter);
