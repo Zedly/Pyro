@@ -21,7 +21,6 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.util.Vector;
 import zedly.particles.ParticleEffect;
 import zedly.particles.ParticleEffectOld;
-import zedly.fireworkeffects.FireworkEffectPlayer;
 
 public class Watcher implements Listener {
 
@@ -283,7 +282,7 @@ public class Watcher implements Listener {
             bu = bu.withColor(org.bukkit.Color.fromRGB(Storage.rainbowcolors[Storage.rnd.nextInt(12)]));
             bu = bu.trail(true);
             bu = bu.with(FireworkEffect.Type.BALL);
-            Storage.fep.playFirework(evt.getEntity().getLocation(), bu.build());
+            FireworkEffectPlayer.playFirework(evt.getEntity().getLocation(), bu.build());
             Storage.bangBalls.remove((Snowball) evt.getEntity());
         }
         return true;
@@ -461,14 +460,14 @@ public class Watcher implements Listener {
             if (!close) {
                 FireworkEffect.Builder builder = FireworkEffect.builder();
                 FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BURST).withColor(Color.fromRGB(colors[0], colors[1], colors[2])).build();
-                Storage.fep.playFirework(evt.getEntity().getLocation(), effect);
+                FireworkEffectPlayer.playFirework(evt.getEntity().getLocation(), effect);
             } else {
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.pyro, new Runnable() {
                     @Override
                     public void run() {
                         FireworkEffect.Builder builder = FireworkEffect.builder();
                         FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BURST).withColor(Color.fromRGB(colors[0], colors[1], colors[2])).build();
-                        Storage.fep.playFirework(evt.getEntity().getLocation(), effect);
+                        FireworkEffectPlayer.playFirework(evt.getEntity().getLocation(), effect);
                     }
                 }, 8);
                 for (int i = 1000; i > 0; i -= 10) {

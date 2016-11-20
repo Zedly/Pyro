@@ -9,7 +9,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Item;
 import org.bukkit.plugin.java.JavaPlugin;
-import zedly.fireworkeffects.FireworkEffectPlayer;
 
 public class Pyro extends JavaPlugin {
 
@@ -28,7 +27,6 @@ public class Pyro extends JavaPlugin {
             Storage.recipes.put(str.split("=")[0].replace("{", ""), b);
         }
         getServer().getPluginManager().registerEvents(new Watcher(), this);
-        Storage.fep = new FireworkEffectPlayer(this);
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new HFEffects(), 0, 1);
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new TaskChromaticArmor(), 0, 1);
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new PlayParty(), 0, 3);

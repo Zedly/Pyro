@@ -189,7 +189,7 @@ public class Utilities {
         Location loc = l.clone().add(new org.bukkit.util.Vector(0.5, 0.5 + launchHeight, 0.5));
         if (power == 0) {
             try {
-                Storage.fep.playFirework(loc, bu.build());
+                FireworkEffectPlayer.playFirework(loc, bu.build());
             } catch (Exception ex) {
             }
         } else {
@@ -208,7 +208,7 @@ public class Utilities {
                 LeatherArmorMeta lm = (LeatherArmorMeta) is.getItemMeta();
                 Color rgb = lm.getColor();
                 try {
-                    Storage.fep.playFirework(loc, FireworkEffect.Type.BALL, rgb, false, true);
+                    FireworkEffectPlayer.playFirework(loc, FireworkEffect.Type.BALL, rgb, false, true);
                 } catch (Exception ex) {
                 }
             }

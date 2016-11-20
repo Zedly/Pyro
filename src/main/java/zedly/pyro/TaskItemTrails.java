@@ -54,7 +54,8 @@ public class TaskItemTrails implements Runnable {
             if (!lastTrailEmitLocations.containsKey(player)) {
                 lastTrailEmitLocations.put(player, player.getLocation());
             } else if (player.getWorld().equals(lastTrailEmitLocations.get(player).getWorld())) {
-                if (player.getLocation().distance(lastTrailEmitLocations.get(player)) >= 0.25 && player.getInventory().getChestplate() != null) {
+                if (player.getLocation().distance(lastTrailEmitLocations.get(player)) >= 0.25 && player.getInventory().getChestplate() != null
+                        && player.getInventory().getChestplate().hasItemMeta()) {
                     if (player.getInventory().getChestplate().getItemMeta().hasLore()) {
                         List<String> lore = player.getInventory().getChestplate().getItemMeta().getLore();
                         ArrayList<ItemStack> toDrop = new ArrayList<>();

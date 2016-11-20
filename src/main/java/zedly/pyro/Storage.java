@@ -5,7 +5,6 @@ import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
-import zedly.fireworkeffects.FireworkEffectPlayer;
 
 public class Storage {
 
@@ -14,7 +13,6 @@ public class Storage {
     public static final Random rnd = new Random();
     public static boolean globalparty = false;
     public static String colorString;
-    public static FireworkEffectPlayer fep;
     
     //Pre-defined Variables
     public static final String logo = ChatColor.DARK_RED + "[" + ChatColor.GOLD + "Pyro" + ChatColor.DARK_RED + "]" + ChatColor.YELLOW + "";
