@@ -6,7 +6,6 @@
 package zedly.pyro;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Bukkit;
@@ -21,7 +20,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import zedly.particles.ParticleEffect;
-import zedly.particles.ParticleEffectOld;
 
 /**
  *
@@ -112,11 +110,7 @@ public class TaskChromaticArmor implements Runnable {
                                 loc.setX(loc.getX() + (Storage.rnd.nextFloat() / 4) * (Storage.rnd.nextInt(2) * 2 - 1));
                                 loc.setZ(loc.getZ() + (Storage.rnd.nextFloat() / 4) * (Storage.rnd.nextInt(2) * 2 - 1));
                                 Color col = Color.fromRGB(Utilities.clamp(color[0]), Utilities.clamp(color[1]), Utilities.clamp(color[2]));
-                                if (Bukkit.getVersion().contains("1.10")) {
-                                    ParticleEffect.REDSTONE.display(null, loc, col, 32, 0, 0, 0, 1, 1);
-                                } else {
-                                    ParticleEffectOld.REDSTONE.display(new ParticleEffectOld.OrdinaryColor(col), loc, 32);
-                                }
+                                ParticleEffect.REDSTONE.display(null, loc, col, 32, 0, 0, 0, 1, 1);
                             }
                         }
                     }

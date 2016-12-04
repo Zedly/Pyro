@@ -7,7 +7,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
 import zedly.particles.ParticleEffect;
-import zedly.particles.ParticleEffectOld;
 
 public class HFEffects implements Runnable {
 
@@ -50,17 +49,13 @@ public class HFEffects implements Runnable {
             }
             Storage.tntEntities.clear();
             Storage.tntEntities.addAll(ents1);
-        }        
+        }
 
         //Color Arrows
         for (Projectile p : Storage.colorArrows.keySet()) {
             Integer[] colors = Storage.colorArrows.get(p);
             Color color = Color.fromRGB(Utilities.clamp(colors[0]), Utilities.clamp(colors[1]), Utilities.clamp(colors[2]));
-            if (Bukkit.getVersion().contains("1.10")) {
-                ParticleEffect.REDSTONE.display(null, p.getLocation(), color, 32, 0, 0, 0, 1, 1);
-            } else {
-                ParticleEffectOld.REDSTONE.display(new ParticleEffectOld.OrdinaryColor(color), p.getLocation(), 32);
-            }
+            ParticleEffect.REDSTONE.display(null, p.getLocation(), color, 32, 0, 0, 0, 1, 1);
         }
         //Create Glass Rainbows
         HashSet<Entity> snowballsTemp = new HashSet<>();

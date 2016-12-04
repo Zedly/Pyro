@@ -7,7 +7,6 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
 import zedly.particles.ParticleEffect;
-import zedly.particles.ParticleEffectOld;
 
 public class PlayParty implements Runnable {
 
@@ -52,19 +51,11 @@ public class PlayParty implements Runnable {
                             if (p == 9) {
                                 loc.setX(loc.getX() + Math.sin(Math.toRadians((j1 + f) * 100)) * j1 / 330);
                                 loc.setZ(loc.getZ() + Math.cos(Math.toRadians((j1 + f) * 100)) * j1 / 330);
-                                if (Bukkit.getVersion().contains("1.10")) {
-                                    ParticleEffect.SPELL_MOB.display(null, loc, Color.fromRGB(colors), 32, 0, 0, 0, 1, 1);
-                                } else {
-                                    ParticleEffectOld.SPELL_MOB.display(new ParticleEffectOld.OrdinaryColor(Color.fromRGB(colors)), loc, 32);
-                                }
+                                ParticleEffect.SPELL_MOB.display(null, loc, Color.fromRGB(colors), 32, 0, 0, 0, 1, 1);
                             } else if (p == 8) {
                                 loc.setX(loc.getX() + Math.sin(Math.toRadians(j1 + f * 100)) * j1 / 330);
                                 loc.setZ(loc.getZ() + Math.cos(Math.toRadians(j1 + f * 100)) * j1 / 330);
-                                if (Bukkit.getVersion().contains("1.10")) {
-                                    ParticleEffect.REDSTONE.display(null, loc, Color.fromRGB(colors), 32, 0, 0, 0, 1, 1);
-                                } else {
-                                    ParticleEffectOld.REDSTONE.display(new ParticleEffectOld.OrdinaryColor(Color.fromRGB(colors)), loc, 32);
-                                }
+                                ParticleEffect.REDSTONE.display(null, loc, Color.fromRGB(colors), 32, 0, 0, 0, 1, 1);
                             }
                         }
                     }

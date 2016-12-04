@@ -20,7 +20,6 @@ import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.util.Vector;
 import zedly.particles.ParticleEffect;
-import zedly.particles.ParticleEffectOld;
 
 public class Watcher implements Listener {
 
@@ -483,11 +482,7 @@ public class Watcher implements Listener {
                                 loc.setX(loc.getX() + Math.sin(Math.toRadians(j1 + f * 100)) * j1 / 330);
                                 loc.setZ(loc.getZ() + Math.cos(Math.toRadians(j1 + f * 100)) * j1 / 330);
                                 Color col = Color.fromRGB(Utilities.clamp(colors[0]), Utilities.clamp(colors[1]), Utilities.clamp(colors[2]));
-                                if (Bukkit.getVersion().contains("1.10")) {
-                                    ParticleEffect.REDSTONE.display(null, loc, col, 32, 0, 0, 0, 1, 1);
-                                } else {
-                                    ParticleEffectOld.REDSTONE.display(new ParticleEffectOld.OrdinaryColor(col), loc, 32);
-                                }
+                                ParticleEffect.REDSTONE.display(null, loc, col, 32, 0, 0, 0, 1, 1);
                             }
                         }
                     }, (int) ((1000 - i) / 100));
