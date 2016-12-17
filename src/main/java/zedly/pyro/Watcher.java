@@ -386,15 +386,17 @@ public class Watcher implements Listener {
 
     @EventHandler // Stops Easter eggs from being pickef up
     public boolean onItemPickup(PlayerPickupItemEvent evt) {
-        if (evt.getItem().getItemStack().getTypeId() != 383) {
-            return true;
-        }
         Item item = evt.getItem();
         if (Storage.eastereggs.containsKey(item)) {
             evt.setCancelled(true);
             ItemStack newitem = Storage.eastereggs.get(item);
             evt.getItem().setItemStack(newitem);
             Storage.eastereggs.remove(item);
+        } else if (item.getItemStack().hasItemMeta() && item.getItemStack().getItemMeta().hasDisplayName()
+                && item.getItemStack().getItemMeta().getDisplayName().equals(ChatColor.MAGIC + "Transient")) {
+            // Kill items left after a crash
+            evt.setCancelled(true);
+            item.remove();
         }
         return true;
     }

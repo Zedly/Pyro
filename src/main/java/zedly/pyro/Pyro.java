@@ -55,6 +55,9 @@ public class Pyro extends JavaPlugin {
         if (Storage.recipes.get("Bang Snowball")) {
             Recipes.bang();
         }
+        
+        
+        
     }
 
     @Override

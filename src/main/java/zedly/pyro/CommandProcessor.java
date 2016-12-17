@@ -14,6 +14,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SpawnEggMeta;
 import org.bukkit.util.Vector;
 
 public class CommandProcessor {
@@ -382,19 +383,33 @@ public class CommandProcessor {
             case "py": {
                 if (args.length > 0) {
                     switch (args[0]) {
-                        case "egg": {
+                        case "egg":
+                        case "xmas": {
                             if (!sender.hasPermission("pyro.egg")) {
                                 sender.sendMessage(Storage.logo + " You do not have permission to do this!");
                                 return;
                             }
                             Player player = (Player) sender;
-                            ItemStack items = player.getItemInHand().clone();
-                            if (items.getTypeId() == 0) {
+                            ItemStack items = player.getInventory().getItemInMainHand().clone();
+                            if (items != null && items.getType() != Material.AIR) {
                                 sender.sendMessage(Storage.logo + " You must have something in your hand!");
                                 return;
                             }
-                            player.setItemInHand(new ItemStack(0, 0));
-                            Item ent = (Item) player.getWorld().dropItem(player.getLocation().add(new Vector(0, 1, 0)), new ItemStack(383, 1, (short) Storage.eastereggids[Storage.rnd.nextInt(23)]));
+                            player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                            ItemStack disguise;
+                            if (args[0].equals("egg")) {
+                                disguise = new ItemStack(Material.MONSTER_EGG);
+                                SpawnEggMeta meta = (SpawnEggMeta) disguise.getItemMeta();
+                                meta.setSpawnedType(Storage.EASTER_EGG_TYPES[Storage.rnd.nextInt(Storage.EASTER_EGG_TYPES.length)]);
+                                meta.setDisplayName(ChatColor.MAGIC + "Transient");
+                                disguise.setItemMeta(meta);
+                            } else {
+                                disguise = new ItemStack(Material.CHEST);
+                                ItemMeta meta = disguise.getItemMeta();
+                                meta.setDisplayName(ChatColor.MAGIC + "Transient");
+                                disguise.setItemMeta(meta);
+                            }
+                            Item ent = (Item) player.getWorld().dropItem(player.getLocation().add(new Vector(0, 1, 0)), disguise);
                             ent.setVelocity(player.getLocation().getDirection().multiply(0.5));
                             Storage.eastereggs.put(ent, items);
                             ent.setPickupDelay(128);
