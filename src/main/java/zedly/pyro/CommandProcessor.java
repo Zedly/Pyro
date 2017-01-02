@@ -390,8 +390,8 @@ public class CommandProcessor {
                                 return;
                             }
                             Player player = (Player) sender;
-                            ItemStack items = player.getInventory().getItemInMainHand().clone();
-                            if (items != null && items.getType() != Material.AIR) {
+                            ItemStack items = player.getInventory().getItemInMainHand();
+                            if (items == null || items.getType() == Material.AIR) {
                                 sender.sendMessage(Storage.logo + " You must have something in your hand!");
                                 return;
                             }
