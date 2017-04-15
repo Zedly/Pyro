@@ -23,6 +23,8 @@ import zedly.particles.ParticleEffect;
 
 public class Watcher implements Listener {
 
+    private static final HashMap<Block, Integer> SIGN_POWER_CACHE = new HashMap<>();
+
     @EventHandler // Vanish activated
     public boolean onCommand(PlayerCommandPreprocessEvent evt) {
         if (evt.getMessage().equals("/vanish") && evt.getPlayer().hasPermission("vanish.vanish")) {
@@ -84,57 +86,49 @@ public class Watcher implements Listener {
         return true;
     }
 
-    @EventHandler // Firework Sign, Linked to signboom
-    public boolean onRedstone(BlockRedstoneEvent evt) {
-        ArrayList<Block> redstoneBlocks = new ArrayList<>();
-        for (int x = -1; x < 2; x++) {
-            for (int y = -1; y < 2; y++) {
-                for (int z = -1; z < 2; z++) {
-                    redstoneBlocks.add(evt.getBlock().getRelative(x, y, z));
-                }
-            }
+    @EventHandler
+    public void dropperRedstone(BlockPhysicsEvent evt) {
+        if ((evt.getBlock().getType() != Material.SIGN_POST
+                && evt.getBlock().getType() != Material.WALL_SIGN) || evt.isCancelled()) {
+            return;
         }
-        for (Block blk : redstoneBlocks) {
-            if ((blk.getType() == SIGN_POST || blk.getType() == WALL_SIGN)) {
-                if (evt.getNewCurrent() != 0) {
-                    if (!Storage.poweredBlocks.contains(blk)) {
-                        Sign sign = (Sign) blk.getState();
-                        if (sign.getLine(0).equals(ChatColor.DARK_BLUE + "[Firework]")) {
-                            if (!sign.getLine(1).equals("")) {
-                                Utilities.explodeFromString(blk.getLocation(), sign.getLine(1));
-                            }
-                            if (!sign.getLine(2).equals("")) {
-                                Utilities.explodeFromString(blk.getLocation(), sign.getLine(2));
-                            }
-                            if (!sign.getLine(3).equals("")) {
-                                Utilities.explodeFromString(blk.getLocation(), sign.getLine(3));
-                            }
-                        } else if (sign.getLine(0).equals(ChatColor.DARK_BLUE + "[Detonate]")) {
-                            String channel = sign.getLine(1);
-                            if (Storage.remoteTnt.containsKey(channel)) {
-                                ArrayList<Block> blocks = Storage.remoteTnt.get(channel);
-                                for (Block block : blocks) {
-                                    if (block.getType() == TNT) {
-                                        block.setType(AIR);
-                                        TNTPrimed ent = (TNTPrimed) block.getWorld().spawnEntity(block.getLocation(), EntityType.PRIMED_TNT);
-                                        ent.setYield(4);
-                                        ent.setFuseTicks(0);
-                                        if (Storage.explodingBlocks.containsKey(block)) {
-                                            Storage.explodingBlocks.get(block).explode(ent);
-                                        }
-                                    }
-                                }
-                                Storage.remoteTnt.remove(channel);
-                            }
+        Block signBlock = evt.getBlock();
+        int power = signBlock.getBlockPower();
+        Integer oldPower = SIGN_POWER_CACHE.put(signBlock, power);
+        if ((oldPower == null || oldPower == 0) && power > 0) { // Positive redstone edge on a sign
+            redstoneEdgeOnSign((Sign) signBlock.getState());
+        }
+    }
+
+    public void redstoneEdgeOnSign(Sign sign) {
+        if (sign.getLine(0).equals(ChatColor.DARK_BLUE + "[Firework]")) {
+            if (!sign.getLine(1).equals("")) {
+                Utilities.explodeFromString(sign.getLocation(), sign.getLine(1));
+            }
+            if (!sign.getLine(2).equals("")) {
+                Utilities.explodeFromString(sign.getLocation(), sign.getLine(2));
+            }
+            if (!sign.getLine(3).equals("")) {
+                Utilities.explodeFromString(sign.getLocation(), sign.getLine(3));
+            }
+        } else if (sign.getLine(0).equals(ChatColor.DARK_BLUE + "[Detonate]")) {
+            String channel = sign.getLine(1);
+            if (Storage.remoteTnt.containsKey(channel)) {
+                ArrayList<Block> blocks = Storage.remoteTnt.get(channel);
+                for (Block block : blocks) {
+                    if (block.getType() == TNT) {
+                        block.setType(AIR);
+                        TNTPrimed ent = (TNTPrimed) block.getWorld().spawnEntity(block.getLocation(), EntityType.PRIMED_TNT);
+                        ent.setYield(4);
+                        ent.setFuseTicks(0);
+                        if (Storage.explodingBlocks.containsKey(block)) {
+                            Storage.explodingBlocks.get(block).explode(ent);
                         }
-                        Storage.poweredBlocks.add(blk);
                     }
-                } else {
-                    Storage.poweredBlocks.remove(blk);
                 }
+                Storage.remoteTnt.remove(channel);
             }
         }
-        return true;
     }
 
     @EventHandler // Removed Vanished Players
