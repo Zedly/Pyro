@@ -87,7 +87,7 @@ public class Watcher implements Listener {
     }
 
     @EventHandler
-    public void dropperRedstone(BlockPhysicsEvent evt) {
+    public void onRedstone(BlockPhysicsEvent evt) {
         if ((evt.getBlock().getType() != Material.SIGN_POST
                 && evt.getBlock().getType() != Material.WALL_SIGN) || evt.isCancelled()) {
             return;
@@ -381,6 +381,28 @@ public class Watcher implements Listener {
     @EventHandler // Stops Easter eggs from being pickef up
     public boolean onItemPickup(PlayerPickupItemEvent evt) {
         Item item = evt.getItem();
+        if (Storage.eastereggs.containsKey(item)) {
+            evt.setCancelled(true);
+            ItemStack newitem = Storage.eastereggs.get(item);
+            evt.getItem().setItemStack(newitem);
+            Storage.eastereggs.remove(item);
+        } else if (item.getItemStack().hasItemMeta() && item.getItemStack().getItemMeta().hasDisplayName()
+                && item.getItemStack().getItemMeta().getDisplayName().equals(ChatColor.MAGIC + "Transient")) {
+            // Kill items left after a crash
+            evt.setCancelled(true);
+            item.remove();
+        }
+        return true;
+    }
+    
+    @EventHandler // Stops Easter eggs from being pickef up
+    public boolean onItemPickup(InventoryPickupItemEvent evt) {
+        Item item = evt.getItem();
+        if(TaskItemTrails.trailItems.contains(evt.getItem())) {
+            TaskItemTrails.trailItems.remove(evt.getItem());
+            evt.getItem().remove();
+            evt.setCancelled(true);
+        }
         if (Storage.eastereggs.containsKey(item)) {
             evt.setCancelled(true);
             ItemStack newitem = Storage.eastereggs.get(item);

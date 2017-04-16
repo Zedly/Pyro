@@ -539,11 +539,13 @@ public class CraftingGUI {
                     colors = fwk.fade;
                     numberRandom = fwk.numberRandomFade;
                 }
+                
+                
                 setSlot(39, inv, ChatColor.WHITE + "Less Random Colors", null, GHAST_TEAR, 0, 1);
                 if (numberRandom == 0) {
                     setSlot(40, inv, ChatColor.WHITE + "Random: " + ChatColor.RED + "Disabled", null, ENDER_PEARL, 0, 1);
                 } else {
-                    setSlot(40, inv, ChatColor.WHITE + "Random: " + ChatColor.GREEN + "Enabled", null, EYE_OF_ENDER, 0, numberRandom);
+                    setSlot(40, inv, ChatColor.WHITE + "Random: " + ChatColor.GREEN + "Enabled", null, EYE_OF_ENDER, 0, numberRandom + 1);
                 }
                 setSlot(41, inv, ChatColor.WHITE + "More Random Colors", null, SNOW_BALL, 0, 1);
                 resetColors(inv, colors);
@@ -560,10 +562,10 @@ public class CraftingGUI {
                 setTypeIcon(fwk, 13, inv);
                 setSlot(15, inv, "Trail: " + trail, null, DIAMOND, 0, 1);
                 setSlot(28, inv, "Decrease Power", null, GHAST_TEAR, 0, 1);
-                setSlot(29, inv, "Power: " + ChatColor.GREEN + fwk.power, null, SULPHUR, 0, fwk.power);
+                setSlot(29, inv, "Power: " + ChatColor.GREEN + fwk.power, null, SULPHUR, 0, fwk.power + 1);
                 setSlot(30, inv, "Increase Power", null, SNOW_BALL, 0, 1);
                 setSlot(32, inv, "Decrease Launch Height", null, GHAST_TEAR, 0, 1);
-                setSlot(33, inv, "Launch Height: " + ChatColor.GREEN + fwk.launchHeight, null, SUGAR, 0, fwk.launchHeight);
+                setSlot(33, inv, "Launch Height: " + ChatColor.GREEN + fwk.launchHeight, null, SUGAR, 0, fwk.launchHeight + 1);
                 setSlot(34, inv, "Increase Launch Height", null, SNOW_BALL, 0, 1);
                 if (fwk.randomPower) {
                     setSlot(38, inv, "Random: " + ChatColor.GREEN + "Enabled", null, EYE_OF_ENDER, 0, 1);
@@ -641,10 +643,10 @@ public class CraftingGUI {
         int counter = 0;
         int[] dyeColors = new int[]{1, 14, 11, 10, 2, 12, 4, 7, 9, 13, 5, 6, 8, 3, 15, 0};
         for (int i = 0; i < inventory.getSize(); i++) {
-            if (inventory.getItem(i) == null || inventory.getItem(i).getType().equals(INK_SACK)) {
-                short data = 0;
+            if (inventory.getItem(i) == null || inventory.getItem(i).getType() == Material.AIR || inventory.getItem(i).getType()== Material.INK_SACK) {
+                short data = 1;
                 if (colors.contains(15 - dyeColors[counter])) {
-                    data = 1;
+                    data = 64;
                 }
                 ItemStack stk = new ItemStack(INK_SACK, data, (short) dyeColors[counter]);
                 ItemMeta m = stk.getItemMeta();

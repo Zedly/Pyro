@@ -36,7 +36,7 @@ import org.bukkit.inventory.ItemStack;
  */
 public class TaskItemTrails implements Runnable {
 
-    private final HashSet<Item> trailItems = new HashSet<>();
+    public static final HashSet<Item> trailItems = new HashSet<>();
     private final HashMap<Player, Location> lastTrailEmitLocations = new HashMap<>();
 
     public void run() {
@@ -60,23 +60,23 @@ public class TaskItemTrails implements Runnable {
                         List<String> lore = player.getInventory().getChestplate().getItemMeta().getLore();
                         ArrayList<ItemStack> toDrop = new ArrayList<>();
                         if (lore.contains(ChatColor.GOLD + "Flower Trail")) {
-                            toDrop.add(new ItemStack(YELLOW_FLOWER, 0, (short) 0));
+                            toDrop.add(new ItemStack(YELLOW_FLOWER, 1, (short) 0));
                             for (short x = 0; x < 8; x++) {
-                                toDrop.add(new ItemStack(RED_ROSE, 0, (short) x));
+                                toDrop.add(new ItemStack(RED_ROSE, 1, (short) x));
                             }
                         }
                         if (lore.contains(ChatColor.GOLD + "Mineral Trail")) {
                             Material[] materials = new Material[]{GOLD_INGOT, REDSTONE, DIAMOND, IRON_INGOT, EMERALD, COAL, QUARTZ, DIAMOND};
-                            toDrop.add(new ItemStack(INK_SACK, 0, (short) 4));
+                            toDrop.add(new ItemStack(INK_SACK, 1, (short) 4));
                             for (short x = 0; x < 8; x++) {
-                                toDrop.add(new ItemStack(materials[x], 0, (short) 0));
+                                toDrop.add(new ItemStack(materials[x], 1, (short) 0));
                             }
                         }
                         if (lore.contains(ChatColor.GOLD + "Color Trail")) {
                             Material mat = WOOL;
                             short[] ints = {14, 6, 1, 4, 5, 13, 11, 3, 2};
                             for (short x = 0; x < 8; x++) {
-                                toDrop.add(new ItemStack(WOOL, 0, (short) ints[x]));
+                                toDrop.add(new ItemStack(WOOL, 1, (short) ints[x]));
                             }
                         }
                         if (lore.contains(ChatColor.GOLD + "Custom Trail")) {
@@ -94,7 +94,7 @@ public class TaskItemTrails implements Runnable {
                                 }
                                 if (Material.getMaterial(tempMat) != null && Material.getMaterial(tempMat) != Material.AIR) {
                                     Material mat = Material.getMaterial(tempMat);
-                                    toDrop.add(new ItemStack(mat, 0, (short) data));
+                                    toDrop.add(new ItemStack(mat, 1, (short) data));
                                 }
                             }
                         }
@@ -109,7 +109,11 @@ public class TaskItemTrails implements Runnable {
                             getServer().getScheduler().scheduleSyncDelayedTask(Storage.pyro, new Runnable() {
                                 @Override
                                 public void run() {
-                                    trailItems.add(player.getWorld().dropItemNaturally(player.getLocation(), s));
+                                    Item item = player.getWorld().dropItemNaturally(player.getLocation(), s);
+                                    item.setPickupDelay(Integer.MAX_VALUE);
+                                    //s.setAmount(0);
+                                    //item.setItemStack(s);
+                                    trailItems.add(item);
                                 }
                             }, counter);
                         }
