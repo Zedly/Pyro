@@ -66,7 +66,7 @@ public class TaskItemTrails implements Runnable {
                             }
                         }
                         if (lore.contains(ChatColor.GOLD + "Mineral Trail")) {
-                            Material[] materials = new Material[]{GOLD_INGOT, REDSTONE, DIAMOND, IRON_INGOT, EMERALD, COAL, QUARTZ, DIAMOND};
+                            Material[] materials = new Material[]{GOLD_INGOT, REDSTONE, IRON_INGOT, EMERALD, COAL, QUARTZ, DIAMOND};
                             toDrop.add(new ItemStack(INK_SACK, 1, (short) 4));
                             for (short x = 0; x < 8; x++) {
                                 toDrop.add(new ItemStack(materials[x], 1, (short) 0));
@@ -115,7 +115,7 @@ public class TaskItemTrails implements Runnable {
                                     //item.setItemStack(s);
                                     trailItems.add(item);
                                 }
-                            }, counter);
+                            }, 2 * counter);
                         }
                     }
                 }
