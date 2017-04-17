@@ -1,15 +1,37 @@
 package zedly.pyro;
 
+import java.lang.reflect.Field;
 import java.util.*;
+import net.minecraft.server.v1_11_R1.DataWatcher;
+import net.minecraft.server.v1_11_R1.DataWatcherObject;
+import net.minecraft.server.v1_11_R1.DataWatcherRegistry;
+import net.minecraft.server.v1_11_R1.EntityPlayer;
+import net.minecraft.server.v1_11_R1.PacketPlayOutEntityMetadata;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
 import org.bukkit.entity.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
 
 public class Utilities {
+
+    private static boolean nmsDetected = false;
+    private static FakeEntitySender fakeEntitySender;
+
+    static {
+        try {
+            Class.forName("net.minecraft.server.v1_11_R1.EntityPlayer");
+            nmsDetected = true;
+            fakeEntitySender = new FakeEntitySender();
+            System.out.println("Compatible NMS version detected");
+        } catch (Exception e) {
+            System.out.println("NMS version not compatible!");
+            fakeEntitySender = null;
+        }
+    }
 
     // Retuns the center of the block at the specified location
     public static Location getCenter(Location loc) {
@@ -425,4 +447,55 @@ public class Utilities {
         }
         return false;
     }
+
+    public static boolean setEntityGlowing(Entity entity, Player viewer, boolean glowing) {
+        if (!nmsDetected) {
+            return false;
+        }
+        return fakeEntitySender.setEntityGlowing(entity, viewer, glowing);
+    }
+
+    private static class FakeEntitySender {
+
+        private FakeEntitySender() {
+        }
+
+        public boolean setEntityGlowing(Entity entity, Player player, boolean glowing) {
+            if (!nmsDetected) {
+                return false;
+            }
+
+            int entityId = entity.getEntityId();
+
+            DataWatcherObject<Byte> dwo0 = new DataWatcherObject<>(0, DataWatcherRegistry.a); // Indicating a metadata value of type Byte at index 0
+            DataWatcherObject<Boolean> dwo5 = new DataWatcherObject<>(5, DataWatcherRegistry.h); // Indicating a metadata value of type Boolean at index 5
+            DataWatcher.Item<Byte> dwi0 = new DataWatcher.Item<>(dwo0, (byte) 0x60); // A Metadata item of type Byte with value 0x60
+            DataWatcher.Item<Boolean> dwi5 = new DataWatcher.Item<>(dwo5, glowing); // A Metadata item of type Boolean with value true
+
+            List<DataWatcher.Item> dwiList = new ArrayList<>();
+            dwiList.add(dwi0);
+            dwiList.add(dwi5);
+
+            PacketPlayOutEntityMetadata ppoem = new PacketPlayOutEntityMetadata();
+            Class clazz = ppoem.getClass();
+
+            try {
+                // Entity ID and DataWatcher items
+                Field f = clazz.getDeclaredField("a");
+                f.setAccessible(true);
+                f.setInt(ppoem, entityId);
+                f = clazz.getDeclaredField("b");
+                f.setAccessible(true);
+                f.set(ppoem, dwiList);
+            } catch (NoSuchFieldException | IllegalAccessException ex) {
+                ex.printStackTrace();
+                return false;
+            }
+
+            EntityPlayer ep = ((CraftPlayer) player).getHandle();
+            ep.playerConnection.networkManager.sendPacket(ppoem);
+            return true;
+        }
+    }
+
 }

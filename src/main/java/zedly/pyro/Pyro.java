@@ -62,7 +62,7 @@ public class Pyro extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        getServer().getScheduler().cancelAllTasks();
+        getServer().getScheduler().cancelTasks(this);
         for (Item item : Storage.eastereggs.keySet()) {
             item.getWorld().dropItemNaturally(item.getLocation(), Storage.eastereggs.get(item));
             item.remove();
