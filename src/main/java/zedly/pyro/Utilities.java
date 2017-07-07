@@ -2,15 +2,15 @@ package zedly.pyro;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import net.minecraft.server.v1_11_R1.DataWatcher;
-import net.minecraft.server.v1_11_R1.DataWatcherObject;
-import net.minecraft.server.v1_11_R1.DataWatcherRegistry;
-import net.minecraft.server.v1_11_R1.EntityPlayer;
-import net.minecraft.server.v1_11_R1.PacketPlayOutEntityMetadata;
+import net.minecraft.server.v1_12_R1.DataWatcher;
+import net.minecraft.server.v1_12_R1.DataWatcherObject;
+import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
+import net.minecraft.server.v1_12_R1.EntityPlayer;
+import net.minecraft.server.v1_12_R1.PacketPlayOutEntityMetadata;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.*;
@@ -23,7 +23,7 @@ public class Utilities {
 
     static {
         try {
-            Class.forName("net.minecraft.server.v1_11_R1.EntityPlayer");
+            Class.forName("net.minecraft.server.v1_12_R1.EntityPlayer");
             nmsDetected = true;
             fakeEntitySender = new FakeEntitySender();
             System.out.println("Compatible NMS version detected");

@@ -29,6 +29,7 @@ import static org.bukkit.Material.YELLOW_FLOWER;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  *
@@ -38,6 +39,11 @@ public class TaskItemTrails implements Runnable {
 
     public static final HashSet<Item> trailItems = new HashSet<>();
     private final HashMap<Player, Location> lastTrailEmitLocations = new HashMap<>();
+    private static final ArrayList<String> VOLATILE_LORE = new ArrayList<String>(1);
+    
+    static {
+       VOLATILE_LORE.add(ChatColor.GRAY + "Volatile");
+    }
 
     public void run() {
         //Remove Item Trails
@@ -105,6 +111,10 @@ public class TaskItemTrails implements Runnable {
                             } else {
                                 counter = 1;
                             }
+                            ItemMeta meta = stk.getItemMeta();
+                            meta.setDisplayName(ChatColor.MAGIC + "Transient");
+                            meta.setLore(VOLATILE_LORE);
+                            stk.setItemMeta(meta);
                             final ItemStack s = stk;
                             getServer().getScheduler().scheduleSyncDelayedTask(Storage.pyro, new Runnable() {
                                 @Override
