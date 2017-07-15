@@ -421,6 +421,14 @@ public class CommandProcessor {
                                 return;
                             }
                             sender.sendMessage(Storage.logo + " " + Storage.eastereggs.size() + " egg(s) remaining!");
+                            if (args.length > 1 && args[1].equals("-i")){
+                                for (Item i : Storage.eastereggs.keySet()){
+                                    sender.sendMessage("- World: " + ChatColor.UNDERLINE + i.getLocation().getWorld().getName() + 
+                                            ChatColor.RESET + " at location: " + i.getLocation().getBlockX() + ", "+ 
+                                            i.getLocation().getBlockY() + ", "+ i.getLocation().getBlockZ());
+                                }
+                                
+                            }
                             break;
                         }
                         case "party": {
