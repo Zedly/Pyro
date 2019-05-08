@@ -9,15 +9,16 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import zedly.pyro.annotations.EffectTask;
+import zedly.pyro.enums.Frequency;
 
-public class MFEffects implements Runnable {
+public class EasterEggs {
 
-    private final LinkedList<Player> glowViewers = new LinkedList<>();
-    private final HashMap<Item, ItemStack> tempAddBack = new HashMap<>();
+    private static final List<Player> glowViewers = new LinkedList<>();
+    private static final Map<Item, ItemStack> tempAddBack = new HashMap<>();
 
-    @Override
-    public void run() {
-        //Easter Eggs
+    @EffectTask(Frequency.MEDIUM_LOW)
+    public static void taskEasterEggs() {
 
         Iterator it = Storage.eastereggs.entrySet().iterator();
 

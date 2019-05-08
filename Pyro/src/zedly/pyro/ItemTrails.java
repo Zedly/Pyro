@@ -1,15 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package zedly.pyro;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
+
 import org.bukkit.Bukkit;
 import static org.bukkit.Bukkit.getServer;
 import static org.bukkit.Material.*;
@@ -21,18 +13,21 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import zedly.pyro.annotations.EffectTask;
+import zedly.pyro.enums.Frequency;
 
-public class TaskItemTrails implements Runnable {
+public class ItemTrails {
 
-    public static final HashSet<Item> trailItems = new HashSet<>();
-    private final HashMap<Player, Location> lastTrailEmitLocations = new HashMap<>();
-    private static final ArrayList<String> VOLATILE_LORE = new ArrayList<String>(1);
+    public static final  Set<Item>             trailItems             = new HashSet<>();
+    private static final Map<Player, Location> lastTrailEmitLocations = new HashMap<>();
+    private static final ArrayList<String>     VOLATILE_LORE          = new ArrayList<String>(1);
     
     static {
        VOLATILE_LORE.add(ChatColor.GRAY + "Volatile");
     }
 
-    public void run() {
+    @EffectTask(Frequency.LOW)
+    public static void taskItemTrails() {
         //Remove Item Trails
         Iterator dropIt = trailItems.iterator();
         while (dropIt.hasNext()) {

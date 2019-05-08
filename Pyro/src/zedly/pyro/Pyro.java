@@ -4,7 +4,9 @@ package zedly.pyro;
 //Random in GUI
 //Make detonate signs by sneak right clicking and by command
 //Add permissions for recipes, placing signs, everything
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Item;
@@ -13,10 +15,12 @@ import zedly.pyro.enums.Frequency;
 
 public class Pyro extends JavaPlugin {
 
-    @Override
     public void onEnable() {
         Storage.pyro = this;
+        Storage.pluginPath = Bukkit.getPluginManager().getPlugin("Pyro").getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
         this.saveDefaultConfig();
+
+        // Load Recipes?
         for (int x = this.getConfig().getList("Recipes").size() - 1; x >= 0; x--) {
             String str = "" + this.getConfig().getList("Recipes").get(x);
             boolean b;
@@ -27,12 +31,15 @@ public class Pyro extends JavaPlugin {
             }
             Storage.recipes.put(str.split("=")[0].replace("{", ""), b);
         }
+
+        getCommand("chromo").setTabCompleter(new CommandProcessor.ChromoTabCompletion());
+
         getServer().getPluginManager().registerEvents(new Watcher(), this);
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new HFEffects(), 0, 1);
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new TaskChromaticArmor(), 0, 1);
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new PlayParty(), 0, 3);
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new MFEffects(), 0, 10);
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new TaskItemTrails(), 0, 20);
+
+        for (Frequency f : Frequency.values()) {
+            getServer().getScheduler().scheduleSyncRepeatingTask(this, new TaskRunner(f), 1, f.period);
+        }
+
         String col = ChatColor.GOLD + "Colors: " + ChatColor.YELLOW + "";
         for (int i = 0; i < Storage.colors.length; i++) {
             col += Storage.colors[i];
@@ -40,6 +47,7 @@ public class Pyro extends JavaPlugin {
                 col += ChatColor.GOLD + ", " + ChatColor.YELLOW + "";
             }
         }
+
         Storage.colorString = col;
         if (Storage.recipes.get("Remote Detonator")) {
             Recipes.remotes();
@@ -59,12 +67,8 @@ public class Pyro extends JavaPlugin {
         for (Frequency f : Frequency.values()) {
             getServer().getScheduler().scheduleSyncRepeatingTask(this, new TaskRunner(f), 1, f.period);
         }
-        
-        
-        
     }
 
-    @Override
     public void onDisable() {
         getServer().getScheduler().cancelTasks(this);
         for (Item item : Storage.eastereggs.keySet()) {
@@ -73,7 +77,6 @@ public class Pyro extends JavaPlugin {
         }
     }
 
-    @Override
     public boolean onCommand(CommandSender sender, Command command, String commandlabel, String[] args) {
         CommandProcessor.run(sender, command, commandlabel, args);
         return true;

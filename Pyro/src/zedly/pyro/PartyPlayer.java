@@ -6,12 +6,14 @@ import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
+import zedly.pyro.annotations.EffectTask;
+import zedly.pyro.enums.Frequency;
 
 
-public class PlayParty implements Runnable {
+public class PartyPlayer {
 
-    @Override
-    public void run() {
+    @EffectTask(Frequency.MEDIUM_HIGH)
+    public static void taskPartyPlayer() {
         for (final Player player : Storage.partyPlayers) {
             int a = Storage.rnd.nextInt(60) - 30;
             int b = Storage.rnd.nextInt(60) - 30;
@@ -51,11 +53,11 @@ public class PlayParty implements Runnable {
                             if (p == 9) {
                                 loc.setX(loc.getX() + Math.sin(Math.toRadians((j1 + f) * 100)) * j1 / 330);
                                 loc.setZ(loc.getZ() + Math.cos(Math.toRadians((j1 + f) * 100)) * j1 / 330);
-                                ParticleEffect.SPELL_MOB.display(null, loc, Color.fromRGB(colors), 32, 0, 0, 0, 1, 1);
+                                //ParticleEffect.SPELL_MOB.display(null, loc, Color.fromRGB(colors), 32, 0, 0, 0, 1, 1);
                             } else if (p == 8) {
                                 loc.setX(loc.getX() + Math.sin(Math.toRadians(j1 + f * 100)) * j1 / 330);
                                 loc.setZ(loc.getZ() + Math.cos(Math.toRadians(j1 + f * 100)) * j1 / 330);
-                                ParticleEffect.REDSTONE.display(null, loc, Color.fromRGB(colors), 32, 0, 0, 0, 1, 1);
+                                //ParticleEffect.REDSTONE.display(null, loc, Color.fromRGB(colors), 32, 0, 0, 0, 1, 1);
                             }
                         }
                     }
@@ -65,7 +67,7 @@ public class PlayParty implements Runnable {
             double gY = Math.abs(Storage.rnd.nextGaussian()) * 10;
             double gZ = Storage.rnd.nextGaussian() * 10;
             if (Math.pow(gX, 2) + Math.pow(gY, 2) + Math.pow(gZ, 2) > 10) {
-                ParticleEffect.NOTE.display(5, 5, 5, 1f, 10, new Location(player.getWorld(), player.getLocation().getX() + gX, player.getLocation().getY() + gY, player.getLocation().getZ() + gZ), 32);
+                //ParticleEffect.NOTE.display(5, 5, 5, 1f, 10, new Location(player.getWorld(), player.getLocation().getX() + gX, player.getLocation().getY() + gY, player.getLocation().getZ() + gZ), 32);
             }
         }
     }

@@ -20,7 +20,7 @@ public class Recipes {
         snowball.setItemMeta(meta);
 
 
-        ShapelessRecipe recipe = new ShapelessRecipe(Storage.recipeNamespaceKey, new ItemStack(snowball));
+        ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(Storage.pyro, "GLASS_SNOWBALLS"), new ItemStack(snowball));
         Material[] materials = new Material[]{PINK_STAINED_GLASS, MAGENTA_STAINED_GLASS, BLUE_STAINED_GLASS, LIME_STAINED_GLASS,
         YELLOW_STAINED_GLASS, ORANGE_STAINED_GLASS, RED_STAINED_GLASS};
         for (Material mat : materials) {
@@ -38,7 +38,7 @@ public class Recipes {
         lore.add(ChatColor.GREEN + "Remote Detonator");
         meta.setLore(lore);
         remote.setItemMeta(meta);
-        ShapelessRecipe recipe = new ShapelessRecipe(Storage.recipeNamespaceKey, new ItemStack(remote));
+        ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(Storage.pyro, "REMOTE_DETONATOR"), new ItemStack(remote));
         recipe.addIngredient(TRIPWIRE_HOOK).addIngredient(REDSTONE).addIngredient(COMPARATOR).addIngredient(REDSTONE_TORCH).addIngredient(NAME_TAG);
         Bukkit.getServer().addRecipe(recipe);
     }
@@ -51,7 +51,7 @@ public class Recipes {
         lore.add(1, ChatColor.RED + "R: -" + ChatColor.WHITE + ", " + ChatColor.GREEN + "G: -" + ChatColor.WHITE + ", " + ChatColor.BLUE + "B: -");
         meta.setLore(lore);
         arrow.setItemMeta(meta);
-        ShapelessRecipe recipe = new ShapelessRecipe(Storage.recipeNamespaceKey, new ItemStack(arrow));
+        ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(Storage.pyro, "COLOR_ARROW"), new ItemStack(arrow));
         recipe.addIngredient(GUNPOWDER).addIngredient(ARROW);
         Bukkit.getServer().addRecipe(recipe);
     }
@@ -63,20 +63,22 @@ public class Recipes {
         lore.add(0, ChatColor.GOLD + "Bang");
         meta.setLore(lore);
         is.setItemMeta(meta);
-        Bukkit.getServer().addRecipe(new ShapelessRecipe(Storage.recipeNamespaceKey, is).addIngredient(SNOWBALL).addIngredient(SNOWBALL).addIngredient(SNOWBALL).addIngredient(SNOWBALL).addIngredient(GUNPOWDER));
+        Bukkit.getServer().addRecipe(new ShapelessRecipe(new NamespacedKey(Storage.pyro, "FIREWORK_SNOWBALL"), is).addIngredient(SNOWBALL).addIngredient(SNOWBALL).addIngredient(SNOWBALL).addIngredient(SNOWBALL).addIngredient(GUNPOWDER));
     }
 
     public static void chromo() {
-        for (Material m : new Material[]{LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS}) {
-            ItemStack armor = new ItemStack(m);
+        Material[] mats = new Material[]{LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS};
+        String[] names = new String[]{"HELMET", "CHESTPLATE", "LEGGINGS", "BOOTS"};
+        for (int i = 0; i < mats.length; i++) {
+            ItemStack armor = new ItemStack(mats[i]);
             ItemMeta meta = armor.getItemMeta();
             ArrayList<String> lore = new ArrayList<>();
             lore.add(0, ChatColor.GREEN + "Chromatic Armor: " + ChatColor.GOLD + "Not Configured");
             lore.add(1, ChatColor.GRAY + "Not Configured");
             meta.setLore(lore);
             armor.setItemMeta(meta);
-            ShapelessRecipe recipe = new ShapelessRecipe(Storage.recipeNamespaceKey, new ItemStack(armor));
-            recipe.addIngredient(m).addIngredient(NETHER_STAR);
+            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(Storage.pyro, "CHROMATIC_" + names[i]), new ItemStack(armor));
+            recipe.addIngredient(mats[i]).addIngredient(NETHER_STAR);
             Bukkit.getServer().addRecipe(recipe);
         }
     }

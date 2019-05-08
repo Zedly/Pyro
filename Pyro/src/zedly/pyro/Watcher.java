@@ -13,7 +13,6 @@ import org.bukkit.event.*;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.*;
-import static org.bukkit.event.inventory.InventoryType.SlotType.RESULT;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.*;
@@ -22,7 +21,7 @@ import org.bukkit.util.Vector;
 
 public class Watcher implements Listener {
 
-    private static final HashMap<Block, Integer> SIGN_POWER_CACHE = new HashMap<>();
+    private static final Map<Block, Integer> SIGN_POWER_CACHE = new HashMap<>();
 
     @EventHandler // Vanish activated
     public boolean onCommand(PlayerCommandPreprocessEvent evt) {
@@ -272,7 +271,7 @@ public class Watcher implements Listener {
             bu = bu.withColor(org.bukkit.Color.fromRGB(Storage.rainbowcolors[Storage.rnd.nextInt(12)]));
             bu = bu.trail(true);
             bu = bu.with(FireworkEffect.Type.BALL);
-            FireworkEffectPlayer.playFirework(evt.getEntity().getLocation(), bu.build());
+            //FireworkEffectPlayer.playFirework(evt.getEntity().getLocation(), bu.build());
             Storage.bangBalls.remove((Snowball) evt.getEntity());
         }
         return true;
@@ -374,29 +373,12 @@ public class Watcher implements Listener {
         }
         return true;
     }
-
-    @EventHandler // Stops Easter eggs from being pickef up
-    public boolean onItemPickup(PlayerPickupItemEvent evt) {
-        Item item = evt.getItem();
-        if (Storage.eastereggs.containsKey(item)) {
-            evt.setCancelled(true);
-            ItemStack newitem = Storage.eastereggs.get(item);
-            evt.getItem().setItemStack(newitem);
-            Storage.eastereggs.remove(item);
-        } else if (item.getItemStack().hasItemMeta() && item.getItemStack().getItemMeta().hasDisplayName()
-                && item.getItemStack().getItemMeta().getDisplayName().equals(ChatColor.MAGIC + "Transient")) {
-            // Kill items left after a crash
-            evt.setCancelled(true);
-            item.remove();
-        }
-        return true;
-    }
     
     @EventHandler // Stops Easter eggs from being pickef up
     public boolean onItemPickup(InventoryPickupItemEvent evt) {
         Item item = evt.getItem();
-        if(TaskItemTrails.trailItems.contains(evt.getItem())) {
-            TaskItemTrails.trailItems.remove(evt.getItem());
+        if(ItemTrails.trailItems.contains(evt.getItem())) {
+            ItemTrails.trailItems.remove(evt.getItem());
             evt.getItem().remove();
             evt.setCancelled(true);
         }
@@ -474,14 +456,14 @@ public class Watcher implements Listener {
             if (!close) {
                 FireworkEffect.Builder builder = FireworkEffect.builder();
                 FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BURST).withColor(Color.fromRGB(colors[0], colors[1], colors[2])).build();
-                FireworkEffectPlayer.playFirework(evt.getEntity().getLocation(), effect);
+                //FireworkEffectPlayer.playFirework(evt.getEntity().getLocation(), effect);
             } else {
                 Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.pyro, new Runnable() {
                     @Override
                     public void run() {
                         FireworkEffect.Builder builder = FireworkEffect.builder();
                         FireworkEffect effect = builder.flicker(false).trail(false).with(FireworkEffect.Type.BURST).withColor(Color.fromRGB(colors[0], colors[1], colors[2])).build();
-                        FireworkEffectPlayer.playFirework(evt.getEntity().getLocation(), effect);
+                        //FireworkEffectPlayer.playFirework(evt.getEntity().getLocation(), effect);
                     }
                 }, 8);
                 for (int i = 1000; i > 0; i -= 10) {
@@ -507,6 +489,7 @@ public class Watcher implements Listener {
         return true;
     }
 
+        /*
     @EventHandler // Links to lore crafting (craftArrow/craftChromo)
     public void onCraft(InventoryDragEvent evt) {
         if (!evt.getInventory().getType().equals(InventoryType.WORKBENCH) || evt.isCancelled()) {
@@ -561,6 +544,6 @@ public class Watcher implements Listener {
             }
         }
         return true;
-    }
+    }*/
 
 }

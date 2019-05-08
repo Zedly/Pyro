@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.*;
 public class CraftingGUI {
 
     // Chomatic Armor Crafting *DISABLED*
+    /*
     public static void craftChromo(final InventoryView view, final Set<Integer> slots, final Player p,
             final boolean canCraft) {
         if (!Storage.recipes.get("Chromatic Armor")) {
@@ -799,4 +800,5 @@ public class CraftingGUI {
         updatePage(page, player);
     }
 
+*/
 }

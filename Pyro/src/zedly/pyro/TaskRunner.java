@@ -32,7 +32,7 @@ public class TaskRunner implements Runnable {
 
 		tasks = new HashSet<>();
 
-		new FastClasspathScanner(Pyro.class.getPackage().getName())
+		new FastClasspathScanner(Pyro.class.getPackage().getName()).overrideClasspath(Storage.pluginPath)
 			.matchClassesWithMethodAnnotation(
 				EffectTask.class,
 				(clazz, method) -> {

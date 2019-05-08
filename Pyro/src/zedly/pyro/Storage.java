@@ -15,13 +15,16 @@ public class Storage {
 
     //Variables
     public static Pyro pyro;
+
+	// Absolute path to the plugin jar
+	public static String pluginPath;
+
     public static final Random rnd = new Random();
     public static boolean globalparty = false;
     public static String colorString;
 
     //Pre-defined Variables
     public static final String logo = ChatColor.DARK_RED + "[" + ChatColor.GOLD + "Pyro" + ChatColor.DARK_RED + "]" + ChatColor.YELLOW + "";
-    public static Material[] leather = new Material[]{Material.LEATHER_BOOTS, Material.LEATHER_CHESTPLATE, Material.LEATHER_HELMET, Material.LEATHER_LEGGINGS};
     public static Integer[] badIds = new Integer[]{0, 8, 9, 10, 11, 26, 34, 36, 43, 51, 55, 59, 63, 64, 68, 71, 74, 75, 83, 90, 92, 93, 94, 104, 105, 115, 117, 118, 119, 124, 125, 127, 132, 140, 141, 142, 144, 149, 150, 176, 177, 178, 181, 193, 194, 195, 196, 197};
     public static final int[] rainbowcolors = {0xFF0000, 0xFF8800, 0xFFFF00, 0x88FF00, 0x00FF00, 0x00FF88, 0x00FFFF, 0x0088FF, 0x0000FF, 0x8800FF, 0xFF00FF, 0xFF0088};
 
@@ -63,7 +66,6 @@ public class Storage {
     public static final Set<Block> blockedSigns = new HashSet<>();
 
     public static final CompatibilityAdapter COMPATIBILITY_ADAPTER;
-    public static final NamespacedKey recipeNamespaceKey = new NamespacedKey(Storage.pyro, "Pyro");
 
 
     static {

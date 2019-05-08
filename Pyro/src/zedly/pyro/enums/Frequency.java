@@ -8,7 +8,7 @@ import zedly.pyro.annotations.EffectTask;
  *
  */
 public enum Frequency {
-	HIGH(1), MEDIUM_HIGH(5), /*MEDIUM_LOW(10), LOW(20),*/ SLOW(200);
+	HIGH(1), MEDIUM_HIGH(3), MEDIUM_LOW(10), LOW(20);
 
 	public final int period;
 

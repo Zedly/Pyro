@@ -1,36 +1,33 @@
 package zedly.pyro;
 
-import java.lang.reflect.Field;
-import java.util.*;
-import net.minecraft.server.v1_12_R1.DataWatcher;
-import net.minecraft.server.v1_12_R1.DataWatcherObject;
-import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
-import net.minecraft.server.v1_12_R1.EntityPlayer;
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityMetadata;
+
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+
 import org.bukkit.entity.*;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.inventory.meta.Damageable;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class Utilities {
 
     private static boolean nmsDetected = false;
-    private static FakeEntitySender fakeEntitySender;
+    //private static FakeEntitySender fakeEntitySender;
 
     static {
         try {
             Class.forName("net.minecraft.server.v1_12_R1.EntityPlayer");
             nmsDetected = true;
-            fakeEntitySender = new FakeEntitySender();
+            //fakeEntitySender = new FakeEntitySender();
             System.out.println("Compatible NMS version detected");
         } catch (Exception e) {
             System.out.println("NMS version not compatible!");
-            fakeEntitySender = null;
+            //fakeEntitySender = null;
         }
     }
 
@@ -54,6 +51,7 @@ public class Utilities {
         return lo;
     }
 
+    /*
     // Related to Firework Generation
     public static ItemStack generateFireworkItem(CraftedFirework cf, Material mat) {
         ItemStack is = new ItemStack(mat, 1);
@@ -129,7 +127,7 @@ public class Utilities {
             is.setItemMeta(im);
         }
         return is;
-    }
+    }*/
 
     // Returns the correct FireworkType Enum based on the String
     private static FireworkEffect.Type getFireworkType(String type) {
@@ -212,7 +210,7 @@ public class Utilities {
         Location loc = l.clone().add(new org.bukkit.util.Vector(0.5, 0.5 + launchHeight, 0.5));
         if (power == 0) {
             try {
-                FireworkEffectPlayer.playFirework(loc, bu.build());
+                //FireworkEffectPlayer.playFirework(loc, bu.build());
             } catch (Exception ex) {
             }
         } else {
@@ -226,12 +224,12 @@ public class Utilities {
 
     // Creates firework on teleport with Chromatic Armor
     public static void explodeFromArmor(ItemStack is, Location loc) {
-        if (is != null && ArrayUtils.contains(Storage.leather, is.getType()) && is.getItemMeta().hasLore()) {
+        if (is != null && Storage.COMPATIBILITY_ADAPTER.LeatherArmors().contains(is.getType()) && is.getItemMeta().hasLore()) {
             if (is.getItemMeta().hasLore() && is.getItemMeta().getLore().get(0).startsWith(ChatColor.GREEN + "Chromatic Armor")) {
                 LeatherArmorMeta lm = (LeatherArmorMeta) is.getItemMeta();
                 Color rgb = lm.getColor();
                 try {
-                    FireworkEffectPlayer.playFirework(loc, FireworkEffect.Type.BALL, rgb, false, true);
+                    //FireworkEffectPlayer.playFirework(loc, FireworkEffect.Type.BALL, rgb, false, true);
                 } catch (Exception ex) {
                 }
             }
@@ -442,7 +440,6 @@ public class Utilities {
         if (!event.isCancelled()) {
             if (doBreak) {
                 block.setType(Material.AIR);
-                block.setData((byte) 0);
             }
             return true;
         }
@@ -453,7 +450,8 @@ public class Utilities {
         if (!nmsDetected) {
             return false;
         }
-        return fakeEntitySender.setEntityGlowing(entity, viewer, glowing);
+        return false;
+        //return fakeEntitySender.setEntityGlowing(entity, viewer, glowing);
     }
 
     public static void setDamage(ItemStack is, int damage) {
@@ -472,6 +470,115 @@ public class Utilities {
         return 0;
     }
 
+    // Encodes a given string to be invisible to players surrounded by the escape sequence "\< \>"
+    public static String toInvisibleString(String str) {
+        str = "\\<" + str + "\\>" + ChatColor.COLOR_CHAR + 'F';
+        StringBuilder builder = new StringBuilder();
+        for (char c : str.toCharArray()) {
+            builder.append(ChatColor.COLOR_CHAR);
+            builder.append(c);
+        }
+        return builder.toString();
+    }
+
+    // Returns a map of strings to booleans, where the boolean represents visibility
+    public static Map<String, Boolean> fromInvisibleString(String str) {
+        Map<String, Boolean> strs = new LinkedHashMap<>();
+
+        int state = 0; // 0 = close, 1 = waiting for next to open, 2 = open, 3 = waiting for next to close
+        StringBuilder builder = new StringBuilder();
+        for (char c : str.toCharArray()) {
+            switch (state) {
+                case 0: // Visible, waiting for '§'
+                    if (c == ChatColor.COLOR_CHAR) {
+                        state = 1;
+                    } else {
+                        builder.append(c);
+                    }
+                    break;
+                case 1: // Got a '§', waiting for '\'
+                    if (c == '\\') {
+                        state = 2;
+                    } else if (c == ChatColor.COLOR_CHAR) {
+                        builder.append(ChatColor.COLOR_CHAR);
+                    } else {
+                        builder.append(ChatColor.COLOR_CHAR);
+                        builder.append(c);
+                        state = 0;
+                    }
+                    break;
+                case 2: // Got a '\', waiting for '§'
+                    if (c == ChatColor.COLOR_CHAR) {
+                        state = 3;
+                    } else {
+                        builder.append(ChatColor.COLOR_CHAR);
+                        builder.append('\\');
+                        builder.append(c);
+                        state = 0;
+                    }
+                    break;
+                case 3: // Got a '§', waiting for '<'
+                    if (c == '<') {
+                        state = 4;
+                        if (builder.length() != 0) {
+                            strs.put(builder.toString(), true);
+                            builder = new StringBuilder();
+                        }
+                    } else if (c == ChatColor.COLOR_CHAR) {
+                        builder.append(ChatColor.COLOR_CHAR);
+                        builder.append('\\');
+                        state = 1;
+                    } else {
+                        builder.append(ChatColor.COLOR_CHAR);
+                        builder.append('\\');
+                        builder.append(ChatColor.COLOR_CHAR);
+                        builder.append(c);
+                        state = 0;
+                    }
+                    break;
+                case 4: // Invisible, ignore '§'
+                    state = 5;
+                    break;
+                case 5: // Invisible, waiting for '\'
+                    if (c == '\\') {
+                        state = 6;
+                    } else {
+                        builder.append(c);
+                        state = 4;
+                    }
+                    break;
+                case 6: // Got '\', waiting for '§'
+                    if (c == ChatColor.COLOR_CHAR) {
+                        state = 7;
+                    } else {
+                        builder.append('\\');
+                        state = 5;
+                    }
+                    break;
+                case 7: // Got '§', waiting for '>'
+                    if (c == '>') {
+                        state = 0;
+                        if (builder.length() != 0) {
+                            strs.put(builder.toString(), false);
+                            builder = new StringBuilder();
+                        }
+                    } else {
+                        builder.append('\\');
+                        builder.append(c);
+                        state = 4;
+                    }
+                    break;
+            }
+        }
+        if (builder.length() != 0) {
+            strs.put(builder.toString(), true);
+        }
+        return strs;
+    }
+
+
+
+    /*
     private static class FakeEntitySender {
 
         private FakeEntitySender() {
@@ -513,6 +620,6 @@ public class Utilities {
             ep.playerConnection.networkManager.sendPacket(ppoem);
             return true;
         }
-    }
+    }*/
 
 }
