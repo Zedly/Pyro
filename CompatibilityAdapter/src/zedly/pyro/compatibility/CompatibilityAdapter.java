@@ -38,6 +38,7 @@ import static org.bukkit.Material.*;
 import static org.bukkit.potion.PotionEffectType.*;
 import static org.bukkit.potion.PotionEffectType.DOLPHINS_GRACE;
 import static org.bukkit.potion.PotionEffectType.WATER_BREATHING;
+import static zedly.pyro.compatibility.BaseColor.*;
 
 import org.bukkit.event.block.BlockGrowEvent;
 
@@ -795,6 +796,15 @@ public class CompatibilityAdapter {
 	}
 	//endregion
 
+	//region Leather Armor
+	private final EnumStorage<Material> LEATHER_ARMORS = new EnumStorage<>(new Material[]{LEATHER_BOOTS,
+		LEATHER_CHESTPLATE, LEATHER_HELMET, LEATHER_LEGGINGS});
+
+	public EnumStorage<Material> LeatherArmors(){
+		return LEATHER_ARMORS;
+	}
+	//endregion
+
 	//endregion
 
 
@@ -836,163 +846,12 @@ public class CompatibilityAdapter {
 
 	//endregion
 
+	private final EnumStorage<BaseColor> COLORS = new EnumStorage<>(new BaseColor[]{WHITE, ORANGE, MAGENTA, LIGHT_BLUE,
+		YELLOW, LIME, PINK, GRAY, LIGHT_GRAY, CYAN, PURPLE, BLUE, BROWN, GREEN, RED, BLACK});
 
-	//region Enchantment Enum Storage
-
-	//region Terraformer Materials
-	private final EnumStorage<Material> TERRAFORMER_MATERIALS = new EnumStorage<>(new Material[]{STONE, GRASS_BLOCK,
-		DIRT, COBBLESTONE, SAND, GRAVEL, SANDSTONE, BRICK, TNT, BOOKSHELF, MOSSY_COBBLESTONE, ICE, SNOW_BLOCK, CLAY,
-		NETHERRACK, SOUL_SAND, STONE_BRICKS, MYCELIUM, NETHER_BRICK, END_STONE, EMERALD_ORE, QUARTZ_BLOCK, SLIME_BLOCK,
-		PRISMARINE, PACKED_ICE, RED_SANDSTONE}, Ores(), Terracottas(), GlazedTerracottas(), Wools(), Woods(), Planks(),
-		StrippedLogs(), Logs(), Concretes(), ConcretePowders(), StainedGlass(), StrippedWoods());
-
-	public EnumStorage<Material> TerraformerMaterials(){
-		return TERRAFORMER_MATERIALS;
+	public EnumStorage<BaseColor> BaseColors(){
+		return COLORS;
 	}
-	//endregion
-
-
-	//region Lumber Whitelist
-	private final EnumStorage<Material> LUMBER_WHITELIST = new EnumStorage<>(new Material[]{
-		DIRT, GRASS, VINE, SNOW, COCOA, GRAVEL, STONE, DIORITE, GRANITE, ANDESITE, WATER, LAVA, SAND, BROWN_MUSHROOM,
-		RED_MUSHROOM, MOSSY_COBBLESTONE, CLAY, BROWN_MUSHROOM, RED_MUSHROOM, MYCELIUM, TORCH, SUGAR_CANE, GRASS_BLOCK,
-		PODZOL, FERN, GRASS, MELON, PUMPKIN}, TrunkBlocks(), Leaves(), SmallFlowers(), LargeFlowers(), Saplings(),
-		Airs());
-
-	public EnumStorage<Material> LumberWhitelist(){
-		return LUMBER_WHITELIST;
-	}
-	//endregion
-
-
-	//region Transformation Entity Types
-	private final EnumStorage<EntityType> TRANSFORMATION_ENTITY_TYPES = new EnumStorage<>(new EntityType[]{
-		SKELETON, WITHER_SKELETON, ZOMBIE, DROWNED, WITCH, VILLAGER, COW, MUSHROOM_COW, PIG, PIG_ZOMBIE, SILVERFISH,
-		ENDERMITE, OCELOT, WOLF, SLIME, MAGMA_CUBE, GUARDIAN, ELDER_GUARDIAN, PARROT, BAT, SPIDER, CAVE_SPIDER, COW,
-		MUSHROOM_COW, DONKEY, LLAMA, HORSE, SKELETON_HORSE, BLAZE, VEX});
-
-	public EnumStorage<EntityType> TransformationEntityTypes(){
-		return TRANSFORMATION_ENTITY_TYPES;
-	}
-
-	//endregion
-
-
-	//region Fire Raw
-	private final EnumStorage<Material> FIRE_RAW = new EnumStorage<>(new Material[]{STONE, DIORITE, ANDESITE, GRANITE,
-		IRON_ORE, GOLD_ORE, COBBLESTONE, MOSSY_COBBLESTONE, NETHERRACK, STONE_BRICKS}, Terracottas());
-
-	public EnumStorage<Material> FireRaw(){
-		return FIRE_RAW;
-	}
-
-	//endregion
-
-
-	//region Fire Cooked
-	private final EnumStorage<Material> FIRE_COOKED = new EnumStorage<>(new Material[]{STONE_BRICKS, POLISHED_DIORITE,
-		POLISHED_ANDESITE, POLISHED_GRANITE, IRON_INGOT, GOLD_INGOT, STONE, MOSSY_STONE_BRICKS, NETHER_BRICK,
-		CRACKED_STONE_BRICKS}, GlazedTerracottas());
-
-	public EnumStorage<Material> FireCooked(){
-		return FIRE_COOKED;
-	}
-	//endregion
-
-
-	//region Shred Picks
-	private final EnumStorage<Material> SHRED_PICKS = new EnumStorage<>(new Material[]{STONE, GRANITE,
-		ANDESITE, DIORITE, NETHERRACK, GLOWSTONE, SANDSTONE, RED_SANDSTONE, ICE, PACKED_ICE, BLUE_ICE}, Ores(),
-		Terracottas());
-
-	public EnumStorage<Material> ShredPicks(){
-		return SHRED_PICKS;
-	}
-
-	//endregion
-
-
-	//region Shred Shovels
-	private final EnumStorage<Material> SHRED_SHOVELS = new EnumStorage<>(new Material[]{GRASS_BLOCK, PODZOL, DIRT,
-		MYCELIUM, SOUL_SAND, GRAVEL, SOUL_SAND, CLAY}, Sands());
-
-	public EnumStorage<Material> ShredShovels(){
-		return SHRED_SHOVELS;
-	}
-	//endregion
-
-
-	//region Persephone Crops
-	private final EnumStorage<Material> PERSEPHONE_CROPS = new EnumStorage<>(new Material[]{WHEAT, POTATO, CARROT,
-		BEETROOT, NETHER_WART, SOUL_SAND, FARMLAND});
-
-	public EnumStorage<Material> PersephoneCrops(){
-		return PERSEPHONE_CROPS;
-	}
-
-	//endregion
-
-
-	//region Dry Biomes
-	private final EnumStorage<Biome> DRY_BIOMES = new EnumStorage<>(new Biome[]{Biome.DESERT, Biome.FROZEN_OCEAN,
-		Biome.FROZEN_RIVER, Biome.SNOWY_TUNDRA, Biome.SNOWY_MOUNTAINS, Biome.DESERT_HILLS, Biome.SNOWY_BEACH,
-		Biome.SNOWY_TAIGA, Biome.SNOWY_TAIGA_HILLS, Biome.SAVANNA, Biome.SAVANNA_PLATEAU, Biome.BADLANDS,
-		Biome.WOODED_BADLANDS_PLATEAU, Biome.BADLANDS_PLATEAU, Biome.DESERT_LAKES, Biome.ICE_SPIKES,
-		Biome.SNOWY_TAIGA_MOUNTAINS, Biome.SHATTERED_SAVANNA, Biome.SHATTERED_SAVANNA_PLATEAU, Biome.ERODED_BADLANDS,
-		Biome.MODIFIED_WOODED_BADLANDS_PLATEAU, Biome.MODIFIED_BADLANDS_PLATEAU});
-
-	public EnumStorage<Biome> DryBiomes(){
-		return DRY_BIOMES;
-	}
-	//endregion
-
-
-	//region Potion Potions
-	private final EnumStorage<PotionEffectType> POTION_POTIONS = new EnumStorage<>(new PotionEffectType[]{ABSORPTION,
-		DAMAGE_RESISTANCE, FIRE_RESISTANCE, SPEED, JUMP, INVISIBILITY, INCREASE_DAMAGE, HEALTH_BOOST, HEAL,
-		REGENERATION, NIGHT_VISION, SATURATION, FAST_DIGGING, WATER_BREATHING, DOLPHINS_GRACE});
-
-	public EnumStorage<PotionEffectType> PotionPotions(){
-		return POTION_POTIONS;
-	}
-	//endregion
-
-	//endregion
-
-	//endregion
-
-
-	//region Gluttony
-
-	//region Gluttony Food Levels
-	private final int[]      GLUTTONY_FOOD_LEVELS = {4, 5, 1, 6, 5, 3, 1, 6, 5, 6, 8, 5, 6, 2, 1, 2, 6, 8, 10, 8};
-
-	public int[] GluttonyFoodLevels(){
-		return GLUTTONY_FOOD_LEVELS;
-	}
-	//endregion
-
-
-	//region Gluttony Saturations
-	private final double[]   GLUTTONY_SATURATIONS = {2.4, 6, 1.2, 7.2, 6, 3.6, 0.2, 7.2, 6, 9.6, 12.8, 6, 9.6, 0.4, 0.6,
-		1.2, 7.2, 4.8, 12, 12.8};
-
-	public double[] GluttonySaturations(){
-		return GLUTTONY_SATURATIONS;
-	}
-	//endregion
-
-
-	//region Gluttony Food Items
-	private final Material[] GLUTTONY_FOOD_ITEMS  = new Material[]{
-		APPLE, BAKED_POTATO, BEETROOT, BEETROOT_SOUP, BREAD, CARROT, TROPICAL_FISH, COOKED_CHICKEN, COOKED_COD,
-		COOKED_MUTTON, COOKED_PORKCHOP, COOKED_RABBIT, COOKED_SALMON, COOKIE, DRIED_KELP, MELON_SLICE, MUSHROOM_STEW,
-		PUMPKIN_PIE, RABBIT_STEW, COOKED_BEEF};
-
-	public Material[] GluttonyFoodItems(){
-		return GLUTTONY_FOOD_ITEMS;
-	}
-	//endregion
 
 	//endregion
 
