@@ -493,7 +493,6 @@ public class CommandProcessor {
 						hand.setItemMeta(meta);
 
 						player.sendMessage(Storage.logo + " Chromatic Armor created!");
-						Bukkit.broadcastMessage(Utilities.fromInvisibleString(lore.get(0)).toString());
 					}
 				} else {
 					player.sendMessage(Storage.logo + " You need to be holding a leather armor piece!");

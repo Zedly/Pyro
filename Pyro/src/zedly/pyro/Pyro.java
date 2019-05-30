@@ -35,6 +35,7 @@ public class Pyro extends JavaPlugin {
         getCommand("chromo").setTabCompleter(new CommandProcessor.ChromoTabCompletion());
 
         getServer().getPluginManager().registerEvents(new Watcher(), this);
+        getServer().getPluginManager().registerEvents(new ChromaticArmor(), this);
 
         for (Frequency f : Frequency.values()) {
             getServer().getScheduler().scheduleSyncRepeatingTask(this, new TaskRunner(f), 1, f.period);
