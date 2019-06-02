@@ -2,6 +2,8 @@ package zedly.pyro;
 
 import org.bukkit.*;
 import org.bukkit.entity.*;
+import zedly.pyro.Core.Storage;
+import zedly.pyro.Core.Utilities;
 import zedly.pyro.annotations.EffectTask;
 import zedly.pyro.enums.Frequency;
 

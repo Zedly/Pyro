@@ -1,7 +1,9 @@
-package zedly.pyro;
+package zedly.pyro.Core;
 
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import org.bukkit.Bukkit;
+import zedly.pyro.Core.Storage;
+import zedly.pyro.Pyro;
 import zedly.pyro.annotations.EffectTask;
 import zedly.pyro.enums.Frequency;
 
@@ -27,13 +29,12 @@ public class TaskRunner implements Runnable {
 	 *
 	 * @param freq The frequency of annotation that we'll be running.
 	 */
-	TaskRunner(Frequency freq) {
+	public TaskRunner(Frequency freq) {
 		this.logger = Bukkit.getLogger();
 
 		tasks = new HashSet<>();
-
 		new FastClasspathScanner(Pyro.class.getPackage().getName()).overrideClasspath(Storage.pluginPath)
-			.matchClassesWithMethodAnnotation(
+		                                                           .matchClassesWithMethodAnnotation(
 				EffectTask.class,
 				(clazz, method) -> {
 					if (!Modifier.isStatic(method.getModifiers())) {
@@ -46,6 +47,7 @@ public class TaskRunner implements Runnable {
 						tasks.add((Method) method);
 					}
 				}).scan();
+		System.err.println(tasks);
 	}
 
 

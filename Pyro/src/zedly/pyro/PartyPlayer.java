@@ -6,6 +6,7 @@ import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.util.Vector;
+import zedly.pyro.Core.Storage;
 import zedly.pyro.annotations.EffectTask;
 import zedly.pyro.enums.Frequency;
 

@@ -1,7 +1,6 @@
-package zedly.pyro;
+package zedly.pyro.Core;
 
 
-import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 

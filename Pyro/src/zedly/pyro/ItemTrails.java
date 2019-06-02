@@ -13,6 +13,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import zedly.pyro.Core.Storage;
 import zedly.pyro.annotations.EffectTask;
 import zedly.pyro.enums.Frequency;
 

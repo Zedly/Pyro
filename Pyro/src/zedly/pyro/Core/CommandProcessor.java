@@ -1,4 +1,4 @@
-package zedly.pyro;
+package zedly.pyro.Core;
 
 import java.util.*;
 
@@ -20,6 +20,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 import org.bukkit.util.Vector;
+import zedly.pyro.Core.Storage;
+import zedly.pyro.Core.Utilities;
+import zedly.pyro.CraftedFirework;
 import zedly.pyro.compatibility.BaseColor;
 
 public class CommandProcessor {
@@ -180,7 +183,7 @@ public class CommandProcessor {
 					brightness = 127;
 					offset = Float.parseFloat(args[1]);
 					speed = Float.parseFloat(args[2]);
-					gamma = 0.00f;
+					gamma = -1.00f;
 				} else {
 					player.sendMessage(Storage.logo + " <Offset [0..]> <Speed [1..]>");
 					return null;

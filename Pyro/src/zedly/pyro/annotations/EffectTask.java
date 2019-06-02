@@ -1,6 +1,6 @@
 package zedly.pyro.annotations;
 
-import zedly.pyro.TaskRunner;
+import zedly.pyro.Core.TaskRunner;
 import zedly.pyro.enums.Frequency;
 
 import java.lang.annotation.*;

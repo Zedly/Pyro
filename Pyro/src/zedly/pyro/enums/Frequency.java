@@ -1,6 +1,6 @@
 package zedly.pyro.enums;
 
-import zedly.pyro.TaskRunner;
+import zedly.pyro.Core.TaskRunner;
 import zedly.pyro.annotations.EffectTask;
 
 /**
@@ -8,7 +8,7 @@ import zedly.pyro.annotations.EffectTask;
  *
  */
 public enum Frequency {
-	HIGH(1), MEDIUM_HIGH(3), MEDIUM_LOW(10), LOW(20);
+	HIGH(1), MEDIUM_HIGH(3), MEDIUM_LOW(10), LOW(20), SLOW(100);
 
 	public final int period;
 

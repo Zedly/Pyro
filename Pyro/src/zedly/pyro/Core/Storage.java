@@ -1,10 +1,13 @@
-package zedly.pyro;
+package zedly.pyro.Core;
 
 import java.util.*;
 import org.bukkit.*;
 import org.bukkit.block.*;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
+import zedly.pyro.CraftedFirework;
+import zedly.pyro.Pyro;
+import zedly.pyro.TNTExplosion;
 import zedly.pyro.compatibility.CompatibilityAdapter;
 import zedly.pyro.compatibility.NMS_1_13_R1;
 import zedly.pyro.compatibility.NMS_1_13_R2;
@@ -48,22 +51,22 @@ public class Storage {
     new int[]{59, 81, 26}, new int[]{179, 49, 44}, new int[]{30, 27, 27}};
 
     //Collections
-    public static final Map<String, Boolean> recipes = new HashMap<>();
-    public static final Set<Snowball> bangBalls = new HashSet<>();
-    public static final Map<Integer, TNTExplosion> explodingEntities = new HashMap<>();
-    public static final Map<Block, TNTExplosion> explodingBlocks = new HashMap<>();
-    public static final Map<String, ArrayList<Block>> remoteTnt = new HashMap<>();
-    public static final Set<TNTPrimed> tntEntities = new HashSet<>();
-    public static final Set<Player> vanishedPlayers = new HashSet<>();
-    public static final Set<Block> poweredBlocks = new HashSet<>();
-    public static final Map<Item, ItemStack> eastereggs = new HashMap<>();
-    public static final Set<Entity> snowballs = new HashSet<>();
-    public static final Map<Block, Long> rainbowBlocks = new HashMap<>();
-    public static final Map<Location, String> dispenserProj = new HashMap<>();
-    public static final Map<Projectile, Integer[]> colorArrows = new HashMap<>();
-    public static final Set<Player> partyPlayers = new HashSet<>();
-    public static final Map<Player, CraftedFirework> inventories = new HashMap<>();
-    public static final Set<Block> blockedSigns = new HashSet<>();
+    public static final Map<String, Boolean>          recipes           = new HashMap<>();
+    public static final Set<Snowball>                 bangBalls         = new HashSet<>();
+    public static final Map<Integer, TNTExplosion>    explodingEntities = new HashMap<>();
+    public static final Map<Block, TNTExplosion>      explodingBlocks   = new HashMap<>();
+    public static final Map<String, ArrayList<Block>> remoteTnt         = new HashMap<>();
+    public static final Set<TNTPrimed>                tntEntities       = new HashSet<>();
+    public static final Set<Player>                   vanishedPlayers   = new HashSet<>();
+    public static final Set<Block>                    poweredBlocks     = new HashSet<>();
+    public static final Map<Item, ItemStack>          eastereggs        = new HashMap<>();
+    public static final Set<Entity>                   snowballs         = new HashSet<>();
+    public static final Map<Block, Long>              rainbowBlocks     = new HashMap<>();
+    public static final Map<Location, String>         dispenserProj     = new HashMap<>();
+    public static final Map<Projectile, Integer[]>    colorArrows       = new HashMap<>();
+    public static final Set<Player>                   partyPlayers      = new HashSet<>();
+    public static final Map<Player, CraftedFirework>  inventories       = new HashMap<>();
+    public static final Set<Block>                    blockedSigns      = new HashSet<>();
 
     public static final CompatibilityAdapter COMPATIBILITY_ADAPTER;
 

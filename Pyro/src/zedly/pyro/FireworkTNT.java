@@ -6,6 +6,7 @@ import static org.bukkit.Material.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
+import zedly.pyro.Core.Storage;
 import zedly.pyro.annotations.EffectTask;
 import zedly.pyro.enums.Frequency;
 

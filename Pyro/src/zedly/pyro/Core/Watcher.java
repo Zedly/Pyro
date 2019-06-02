@@ -1,4 +1,4 @@
-package zedly.pyro;
+package zedly.pyro.Core;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -18,6 +18,8 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.util.Vector;
+import zedly.pyro.ItemTrails;
+import zedly.pyro.TNTExplosion;
 
 public class Watcher implements Listener {
 

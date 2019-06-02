@@ -11,6 +11,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Item;
 import org.bukkit.plugin.java.JavaPlugin;
+import zedly.pyro.ChromaticArmor.EventListener;
+import zedly.pyro.Core.CommandProcessor;
+import zedly.pyro.Core.Recipes;
+import zedly.pyro.Core.Storage;
+import zedly.pyro.Core.Watcher;
+import zedly.pyro.Core.TaskRunner;
 import zedly.pyro.enums.Frequency;
 
 public class Pyro extends JavaPlugin {
@@ -35,7 +41,7 @@ public class Pyro extends JavaPlugin {
         getCommand("chromo").setTabCompleter(new CommandProcessor.ChromoTabCompletion());
 
         getServer().getPluginManager().registerEvents(new Watcher(), this);
-        getServer().getPluginManager().registerEvents(new ChromaticArmor(), this);
+        getServer().getPluginManager().registerEvents(new EventListener(), this);
 
         for (Frequency f : Frequency.values()) {
             getServer().getScheduler().scheduleSyncRepeatingTask(this, new TaskRunner(f), 1, f.period);
@@ -60,13 +66,13 @@ public class Pyro extends JavaPlugin {
             Recipes.colorArrow();
         }
         if (Storage.recipes.get("New Chromatic Armor")) {
-            Recipes.chromo();
+            zedly.pyro.ChromaticArmor.Recipes.chromoRecipe();
         }
         if (Storage.recipes.get("Bang Snowball")) {
             Recipes.bang();
         }
         for (Frequency f : Frequency.values()) {
-            getServer().getScheduler().scheduleSyncRepeatingTask(this, new TaskRunner(f), 1, f.period);
+            getServer().getScheduler().scheduleSyncRepeatingTask(this, new zedly.pyro.Core.TaskRunner(f), 1, f.period);
         }
     }
 
