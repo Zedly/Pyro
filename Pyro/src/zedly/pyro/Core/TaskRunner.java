@@ -47,7 +47,6 @@ public class TaskRunner implements Runnable {
 						tasks.add((Method) method);
 					}
 				}).scan();
-		System.err.println(tasks);
 	}
 
 

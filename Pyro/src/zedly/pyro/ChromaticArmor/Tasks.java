@@ -8,6 +8,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import zedly.pyro.Core.Utilities;
 import zedly.pyro.annotations.EffectTask;
 import zedly.pyro.enums.Frequency;
@@ -19,7 +20,7 @@ public class Tasks implements Listener {
 	//region Player Chromatic Armor (In hand, armor slots, and inventory)
 
 	// Scan all players and look for new chromatic armor
-	@EffectTask(Frequency.SLOW)
+	@EffectTask(Frequency.LOW)
 	public static void fetchPlayerChromo() {
 		// Scan through all players
 		for (Player player : Bukkit.getOnlinePlayers()) {
@@ -145,7 +146,7 @@ public class Tasks implements Listener {
 	}
 
 	// Scan all living entities and look for new chromatic armor
-	@EffectTask(Frequency.MEDIUM_LOW)
+	@EffectTask(Frequency.SLOW)
 	public static void fetchEntityChromo() {
 		// Scan through all entities
 		for (World world : Bukkit.getWorlds()) {
@@ -211,7 +212,7 @@ public class Tasks implements Listener {
 
 	//region Inventory Chromatic Armor (In chests, hoppers, etc)
 
-	@EffectTask(Frequency.SLOW)
+	@EffectTask(Frequency.LOW)
 	public static void fetchInventoryChromo() {
 		// Scan through all players
 		for (Player player : Bukkit.getOnlinePlayers()) {
@@ -301,7 +302,7 @@ public class Tasks implements Listener {
 				removeFrames.add(frame);
 			}
 			if (params != null) {
-				frame.setItem(Helpers.advanceTime(stk, Storage.t, params).getValue());
+				frame.setItem(Helpers.advanceTime(stk, Storage.t, params).getValue(), false);
 			}
 		}
 		for (ItemFrame frame : removeFrames) {
