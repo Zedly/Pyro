@@ -1,0 +1,37 @@
+case "particle": {
+                        if (!sender.hasPermission("pyro.*")) {
+                            break;
+                        }
+                        Player player = (Player) sender;
+                        Vector vec = new Vector(Storage.rnd.nextGaussian(), 0, Storage.rnd.nextGaussian()).normalize();
+                        if (player.getItemInHand().getType().isBlock()) {
+                            Entity ent = player.getWorld().spawnFallingBlock(player.getLocation().add(vec), player.getItemInHand().getType(), player.getItemInHand().getData().getData());
+                            Storage.wickersheimParticles.add(ent);
+                            ent.setVelocity(vec.crossProduct(new Vector(0, 0.5, 0)));
+                            FallingBlock block = (FallingBlock) ent;
+                            block.setDropItem(false);
+                        }
+                        break;
+                    }
+
+
+case "start": {
+                        if (!sender.hasPermission("pyro.*")) {
+                            break;
+                        }
+                        Storage.server.getScheduler().scheduleSyncRepeatingTask(Storage.pyro, new WickersheimParticles((Player) sender), 1, 1);
+                        break;
+                    }
+                    case "singularity": {
+                        if (!sender.hasPermission("pyro.*")) {
+                            break;
+                        }
+                        Storage.wickersheimSingulatiry = ((Player) sender).getLocation();
+                        break;
+                    }
+
+
+
+
+
+
