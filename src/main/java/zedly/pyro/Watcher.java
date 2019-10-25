@@ -24,18 +24,6 @@ public class Watcher implements Listener {
 
     private static final HashMap<Block, Integer> SIGN_POWER_CACHE = new HashMap<>();
 
-    @EventHandler // Vanish activated
-    public boolean onCommand(PlayerCommandPreprocessEvent evt) {
-        if (evt.getMessage().equals("/vanish") && evt.getPlayer().hasPermission("vanish.vanish")) {
-            if (Storage.vanishedPlayers.contains(evt.getPlayer())) {
-                Storage.vanishedPlayers.remove(evt.getPlayer());
-            } else {
-                Storage.vanishedPlayers.add(evt.getPlayer());
-            }
-        }
-        return true;
-    }
-
     @EventHandler // Firework sign created
     public boolean onSignChange(SignChangeEvent evt) {
         if (Storage.blockedSigns.contains(evt.getBlock())) {
@@ -129,14 +117,6 @@ public class Watcher implements Listener {
         }
     }
 
-    @EventHandler // Removed Vanished Players
-    public boolean onQuit(PlayerQuitEvent evt) {
-        if (Storage.vanishedPlayers.contains(evt.getPlayer())) {
-            Storage.vanishedPlayers.remove(evt.getPlayer());
-        }
-        return true;
-    }
-
     @EventHandler(priority = EventPriority.MONITOR) // Remote TNT Broken
     public boolean onBreak(BlockBreakEvent evt) {
         if (!evt.isCancelled()) {
@@ -188,8 +168,8 @@ public class Watcher implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST) // Remote TNT Placed
     public boolean onPlace(BlockPlaceEvent evt) {
-        if (!evt.isCancelled() 
-                && evt.getPlayer().getInventory().getItemInMainHand().hasItemMeta() 
+        if (!evt.isCancelled()
+                && evt.getPlayer().getInventory().getItemInMainHand().hasItemMeta()
                 && evt.getPlayer().getInventory().getItemInMainHand().getItemMeta().hasLore()) {
             if (evt.getBlockPlaced().getType() == TNT) {
                 List<String> lore = evt.getPlayer().getItemInHand().getItemMeta().getLore();
@@ -252,22 +232,6 @@ public class Watcher implements Listener {
         for (List<Block> savedBlocks : Storage.remoteTnt.values()) {
             blocks.removeAll(savedBlocks);
         }
-        return true;
-    }
-
-    @EventHandler // Player teleports, linked to tpboom
-    public boolean onTeleport(PlayerTeleportEvent evt) {
-        if (evt.getTo().getWorld() == evt.getFrom().getWorld() && evt.getTo().distance(evt.getFrom()) < 10) {
-            return true;
-        }
-        if (Storage.vanishedPlayers.contains(evt.getPlayer())) {
-            return true;
-        }
-        Location loc = evt.getFrom().clone();
-        Utilities.explodeFromArmor(evt.getPlayer().getInventory().getBoots(), loc.add(new Vector(0, 0.38, 0)).clone());
-        Utilities.explodeFromArmor(evt.getPlayer().getInventory().getLeggings(), loc.add(new Vector(0, 0.45, 0)).clone());
-        Utilities.explodeFromArmor(evt.getPlayer().getInventory().getChestplate(), loc.add(new Vector(0, 0.42, 0)).clone());
-        Utilities.explodeFromArmor(evt.getPlayer().getInventory().getHelmet(), loc.add(new Vector(0, 0.5, 0)).clone());
         return true;
     }
 
@@ -383,7 +347,7 @@ public class Watcher implements Listener {
 
     @EventHandler // Stops Easter eggs from being pickef up
     public void onItemPickup(EntityPickupItemEvent evt) {
-        if(!(evt.getEntity() instanceof Player)) {
+        if (!(evt.getEntity() instanceof Player)) {
             return;
         }
         Item item = evt.getItem();
@@ -392,11 +356,6 @@ public class Watcher implements Listener {
             ItemStack newitem = Storage.eastereggs.get(item);
             evt.getItem().setItemStack(newitem);
             Storage.eastereggs.remove(item);
-        } else if (item.getItemStack().hasItemMeta() && item.getItemStack().getItemMeta().hasDisplayName()
-                && item.getItemStack().getItemMeta().getDisplayName().equals(ChatColor.MAGIC + "Transient")) {
-            // Kill items left after a crash
-            evt.setCancelled(true);
-            item.remove();
         }
         return;
     }
@@ -404,21 +363,11 @@ public class Watcher implements Listener {
     @EventHandler // Stops Easter eggs from being pickef up
     public boolean onItemPickup(InventoryPickupItemEvent evt) {
         Item item = evt.getItem();
-        if (TaskItemTrails.trailItems.contains(evt.getItem())) {
-            TaskItemTrails.trailItems.remove(evt.getItem());
-            evt.getItem().remove();
-            evt.setCancelled(true);
-        }
         if (Storage.eastereggs.containsKey(item)) {
             evt.setCancelled(true);
             ItemStack newitem = Storage.eastereggs.get(item);
             evt.getItem().setItemStack(newitem);
             Storage.eastereggs.remove(item);
-        } else if (item.getItemStack().hasItemMeta() && item.getItemStack().getItemMeta().hasDisplayName()
-                && item.getItemStack().getItemMeta().getDisplayName().equals(ChatColor.MAGIC + "Transient")) {
-            // Kill items left after a crash
-            evt.setCancelled(true);
-            item.remove();
         }
         return true;
     }
@@ -523,7 +472,6 @@ public class Watcher implements Listener {
             return;
         }
         CraftingGUI.craftArrow(evt.getView(), evt.getInventorySlots(), (Player) evt.getWhoClicked(), false, false);
-        //CraftingGUI.craftChromo(evt.getView(), evt.getInventorySlots(), (Player) evt.getWhoClicked(), false);
         CraftingGUI.craftFireworkObject(evt.getView(), evt.getInventorySlots(), (Player) evt.getWhoClicked(), false);
     }
 
@@ -540,7 +488,6 @@ public class Watcher implements Listener {
         slot.add(evt.getSlot());
 
         CraftingGUI.craftArrow(evt.getView(), slot, (Player) evt.getWhoClicked(), canCraft, evt.isShiftClick());
-        //CraftingGUI.craftChromo(evt.getView(), slot, (Player) evt.getWhoClicked(), canCraft);
         CraftingGUI.craftFireworkObject(evt.getView(), slot, (Player) evt.getWhoClicked(), canCraft);
     }
 

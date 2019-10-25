@@ -71,7 +71,6 @@ public class Storage {
     public static final HashMap<Block, TNTExplosion> explodingBlocks = new HashMap<>();
     public static final HashMap<String, ArrayList<Block>> remoteTnt = new HashMap<>();
     public static final HashSet<TNTPrimed> tntEntities = new HashSet<>();
-    public static final HashSet<Player> vanishedPlayers = new HashSet<>();
     public static final HashSet<Block> poweredBlocks = new HashSet<>();
     public static final HashMap<Item, ItemStack> eastereggs = new HashMap<>();
     public static final HashSet<Entity> snowballs = new HashSet<>();

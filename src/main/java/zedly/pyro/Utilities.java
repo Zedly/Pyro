@@ -28,6 +28,11 @@ public class Utilities {
                 'm', 'n', 'o', 'p', 'q', 'r', 's', 't',
                 'u', 'v', 'w', 'x', 'y', 'z', '-', '+'};
 
+    //All related to Chromatic Armor and transitioning colors
+    private static final char[] HEX_CHARS
+            = {0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37,
+                0x38, 0x39, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66};
+
     private static boolean nmsDetected = false;
     private static FakeEntitySender fakeEntitySender;
 
@@ -233,20 +238,6 @@ public class Utilities {
         }
     }
 
-    // Creates firework on teleport with Chromatic Armor
-    public static void explodeFromArmor(ItemStack is, Location loc) {
-        if (is != null && ArrayUtils.contains(Storage.leather, is.getType()) && is.getItemMeta().hasLore()) {
-            if (is.getItemMeta().hasLore() && is.getItemMeta().getLore().get(0).startsWith(ChatColor.GREEN + "Chromatic Armor")) {
-                LeatherArmorMeta lm = (LeatherArmorMeta) is.getItemMeta();
-                Color rgb = lm.getColor();
-                try {
-                    FireworkEffectPlayer.playFirework(loc, FireworkEffect.Type.BALL, rgb, false, true);
-                } catch (Exception ex) {
-                }
-            }
-        }
-    }
-    
     /**
      * Checks if the given Block is any of the materials representing a type of
      * sign in 1.14.4.
@@ -277,11 +268,11 @@ public class Utilities {
                 return false;
         }
     }
-    
+
     public static boolean isMaterialDye(final Material material) {
         return ArrayUtils.contains(Storage.FW_COLOR_ICON_MATS, material);
     }
-    
+
     public static String toBase64(int i) {
         return "" + BASE64_CHARS[((i >> 24) & 0x3F)] + BASE64_CHARS[((i >> 18) & 0x3F)] + BASE64_CHARS[((i >> 12) & 0x3F)] + BASE64_CHARS[((i >> 6) & 0x3F)] + BASE64_CHARS[(i & 0x3F)];
     }
@@ -312,14 +303,11 @@ public class Utilities {
         return 0;
     }
 
-    //All related to Chromatic Armor and transitioning colors
-    private static final char[] hexValues = {0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66};
-
     public static String hexString(byte[] binary) {
         char[] hex = new char[binary.length * 2];
         for (int i = 0; i < binary.length; i++) {
-            hex[2 * i] = hexValues[(binary[i] >> 4) & 0xF];
-            hex[2 * i + 1] = hexValues[binary[i] & 0xF];
+            hex[2 * i] = HEX_CHARS[(binary[i] >> 4) & 0xF];
+            hex[2 * i + 1] = HEX_CHARS[binary[i] & 0xF];
         }
         return new String(hex);
     }
@@ -336,85 +324,6 @@ public class Utilities {
         int green = (int) ((Math.pow(Math.sin(greenFreq * counter + (params[4] * Math.PI / 180.0)), params[9]) * params[6]) + 255 - params[6]);
         int blue = (int) ((Math.pow(Math.sin(blueFreq * counter + (params[5] * Math.PI / 180.0)), params[9]) * params[6]) + 255 - params[6]);
         return new int[]{red, green, blue};
-    }
-
-    public static int[] getThemedColor(double[] params, int counter) throws IllegalArgumentException {
-        if (params.length != 12) {
-            throw new IllegalArgumentException();
-        }
-        double h = params[6] + params[3] * Math.sin(params[0] * ((counter + params[9]) * Math.PI / 180.0));
-        double s = params[7] + params[4] * Math.sin(params[1] * ((counter + params[10]) * Math.PI / 180.0));
-        double v = params[8] + params[5] * Math.sin(params[2] * ((counter + params[11]) * Math.PI / 180.0));
-        return HsvToRgb(h, s, v);
-    }
-
-    public static int[] HsvToRgb(double h, double S, double V) {
-        double H = h;
-        while (H < 0) {
-            H += 360;
-        }
-        while (H >= 360) {
-            H -= 360;
-        }
-        double R = 0, G = 0, B = 0;
-        if (V <= 0) {
-            R = G = B = 0;
-        } else if (S <= 0) {
-            R = G = B = V;
-        } else {
-            double hf = H / 60.0;
-            int i = (int) Math.floor(hf);
-            double f = hf - i;
-            double pv = V * (1 - S);
-            double qv = V * (1 - S * f);
-            double tv = V * (1 - S * (1 - f));
-            switch (i) {
-                case 0:
-                    R = V;
-                    G = tv;
-                    B = pv;
-                    break;
-                case 1:
-                    R = qv;
-                    G = V;
-                    B = pv;
-                    break;
-                case 2:
-                    R = pv;
-                    G = V;
-                    B = tv;
-                    break;
-                case 3:
-                    R = pv;
-                    G = qv;
-                    B = V;
-                    break;
-                case 4:
-                    R = tv;
-                    G = pv;
-                    B = V;
-                    break;
-                case 5:
-                    R = V;
-                    G = pv;
-                    B = qv;
-                    break;
-                case 6:
-                    R = V;
-                    G = tv;
-                    B = pv;
-                    break;
-                case -1:
-                    R = V;
-                    G = pv;
-                    B = qv;
-                    break;
-            }
-        }
-        int r = clamp((int) (R * 255.0));
-        int g = clamp((int) (G * 255.0));
-        int b = clamp((int) (B * 255.0));
-        return new int[]{r, g, b};
     }
 
     public static int clamp(int i) {
@@ -454,7 +363,7 @@ public class Utilities {
         }
         return fakeEntitySender.setEntityGlowing(entity, viewer, glowing);
     }
-    
+
     private static class FakeEntitySender {
 
         private FakeEntitySender() {

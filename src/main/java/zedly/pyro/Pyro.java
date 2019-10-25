@@ -28,10 +28,8 @@ public class Pyro extends JavaPlugin {
         }
         getServer().getPluginManager().registerEvents(new Watcher(), this);
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new HFEffects(), 0, 1);
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new TaskChromaticArmor(), 0, 1);
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new PlayParty(), 0, 3);
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new MFEffects(), 0, 10);
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, new TaskItemTrails(), 0, 20);
         String col = ChatColor.GOLD + "Colors: " + ChatColor.YELLOW + "";
         for (int i = 0; i < Storage.FW_COLOR_FRIENDLY_NAMES.length; i++) {
             col += Storage.FW_COLOR_FRIENDLY_NAMES[i];
@@ -49,15 +47,9 @@ public class Pyro extends JavaPlugin {
         if (Storage.recipes.get("New Color Arrow")) {
             Recipes.colorArrow();
         }
-        if (Storage.recipes.get("New Chromatic Armor")) {
-            Recipes.chromo();
-        }
         if (Storage.recipes.get("Bang Snowball")) {
             Recipes.bang();
         }
-        
-        
-        
     }
 
     @Override

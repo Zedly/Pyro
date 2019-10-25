@@ -60,19 +60,4 @@ public class Recipes {
         is.setItemMeta(meta);
         Bukkit.getServer().addRecipe(new ShapelessRecipe(new NamespacedKey(Storage.pyro, "bang_snowball"), is).addIngredient(SNOWBALL).addIngredient(SNOWBALL).addIngredient(SNOWBALL).addIngredient(SNOWBALL).addIngredient(GUNPOWDER));
     }
-
-    public static void chromo() {
-        for (Material m : new Material[]{LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS}) {
-            ItemStack armor = new ItemStack(m);
-            ItemMeta meta = armor.getItemMeta();
-            ArrayList<String> lore = new ArrayList<>();
-            lore.add(0, ChatColor.GREEN + "Chromatic Armor: " + ChatColor.GOLD + "Not Configured");
-            lore.add(1, ChatColor.GRAY + "Not Configured");
-            meta.setLore(lore);
-            armor.setItemMeta(meta);
-            ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(Storage.pyro, "chromatic_" + m.toString().toLowerCase()), new ItemStack(armor));
-            recipe.addIngredient(m).addIngredient(NETHER_STAR);
-            Bukkit.getServer().addRecipe(recipe);
-        }
-    }
 }
