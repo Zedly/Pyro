@@ -2,12 +2,12 @@ package zedly.pyro;
 
 import java.lang.reflect.Field;
 import java.util.*;
-import net.minecraft.server.v1_14_R1.DataWatcher;
-import net.minecraft.server.v1_14_R1.DataWatcherObject;
-import net.minecraft.server.v1_14_R1.DataWatcherRegistry;
-import net.minecraft.server.v1_14_R1.EntityPlayer;
-import net.minecraft.server.v1_14_R1.PacketPlayOutEntityMetadata;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
+import net.minecraft.server.v1_15_R1.DataWatcher;
+import net.minecraft.server.v1_15_R1.DataWatcherObject;
+import net.minecraft.server.v1_15_R1.DataWatcherRegistry;
+import net.minecraft.server.v1_15_R1.EntityPlayer;
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntityMetadata;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -38,7 +38,7 @@ public class Utilities {
 
     static {
         try {
-            Class.forName("net.minecraft.server.v1_14_R1.EntityPlayer");
+            Class.forName("net.minecraft.server.v1_15_R1.EntityPlayer");
             nmsDetected = true;
             fakeEntitySender = new FakeEntitySender();
             System.out.println("Compatible NMS version detected");
@@ -377,13 +377,10 @@ public class Utilities {
             int entityId = entity.getEntityId();
 
             DataWatcherObject<Byte> dwo0 = new DataWatcherObject<>(0, DataWatcherRegistry.a); // Indicating a metadata value of type Byte at index 0
-            DataWatcherObject<Boolean> dwo5 = new DataWatcherObject<>(5, DataWatcherRegistry.i); // Indicating a metadata value of type Boolean at index 5
             DataWatcher.Item<Byte> dwi0 = new DataWatcher.Item<>(dwo0, (byte) 0x60); // A Metadata item of type Byte with value 0x60
-            DataWatcher.Item<Boolean> dwi5 = new DataWatcher.Item<>(dwo5, glowing); // A Metadata item of type Boolean with value true
 
             List<DataWatcher.Item> dwiList = new ArrayList<>();
             dwiList.add(dwi0);
-            dwiList.add(dwi5);
 
             PacketPlayOutEntityMetadata ppoem = new PacketPlayOutEntityMetadata();
             Class clazz = ppoem.getClass();
