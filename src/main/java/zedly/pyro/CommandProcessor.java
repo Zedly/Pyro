@@ -79,11 +79,9 @@ public class CommandProcessor {
                 ItemMeta meta = is.getItemMeta();
                 List<String> lore;
                 if (meta.hasLore()) {
-                    if (meta.getLore().get(0).contains(ChatColor.GREEN + "Remote")) {
-                        lore = meta.getLore();
+                    lore = meta.getLore();
+                    if (meta.getLore().get(0).contains(ChatColor.GREEN + "Remote")) {   
                         lore.remove(0);
-                    } else {
-                        lore = new LinkedList<>();
                     }
                 } else {
                     lore = new LinkedList<>();
