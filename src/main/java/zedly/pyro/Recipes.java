@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class Recipes {
 
-    public static void snowballs() {
+    public static void rainbowSnowballs() {
         ItemStack rainbowSnowball = new ItemStack(SNOWBALL, 1);
         ItemMeta meta = rainbowSnowball.getItemMeta();
         ArrayList<String> lore = new ArrayList<>();

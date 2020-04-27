@@ -10,26 +10,40 @@ import org.bukkit.util.Vector;
 public class HFEffects implements Runnable {
 
     private final LinkedList<Block> tempBlockList = new LinkedList<>();
+    private final LinkedList<Entity> toRemove = new LinkedList<>();
 
     @Override
     public void run() {
-        //Firework TNT
-        HashSet<Block> blox = new HashSet<>();
+        Storage.advancedProjectiles.forEach((ent, pro) -> {
+            if (pro.isAlive()) {
+                pro.trail();
+                pro.incrementTick();
+            } else {
+                toRemove.add(ent);
+            }
+        });
+
+        for (Entity ent : toRemove) {
+            Storage.advancedProjectiles.remove(ent);
+        }
+
+        //Detect recently ignited TNT entities and match their location with known modified TNT blocks
+        HashSet<Block> changedModifiedTNTBlocks = new HashSet<>();
         for (Block block : Storage.explodingBlocks.keySet()) {
             if (block.getType() != TNT && block.getType() != NETHERRACK) {
-                blox.add(block);
+                changedModifiedTNTBlocks.add(block);
             }
         }
-        if (!blox.isEmpty()) {
-            Collection<TNTPrimed> ents = new HashSet<>();
+        if (!changedModifiedTNTBlocks.isEmpty()) {
+            Collection<TNTPrimed> currentTNTEntities = new HashSet<>();
             for (World world : Bukkit.getServer().getWorlds()) {
-                ents.addAll(world.getEntitiesByClass(org.bukkit.entity.TNTPrimed.class));
+                currentTNTEntities.addAll(world.getEntitiesByClass(org.bukkit.entity.TNTPrimed.class));
             }
-            ents.removeAll(Storage.tntEntities);
+            currentTNTEntities.removeAll(Storage.tntEntities);
             HashSet<TNTPrimed> ents1 = new HashSet<>();
             HashSet<Block> kill = new HashSet<>();
-            ents1.addAll(ents);
-            for (TNTPrimed tnt : ents) {
+            ents1.addAll(currentTNTEntities);
+            for (TNTPrimed tnt : currentTNTEntities) {
                 Location loc = tnt.getLocation().add(new Vector(-0.5, -0.5, -0.5));
                 for (Block block : Storage.explodingBlocks.keySet()) {
                     if (loc.distance(block.getLocation()) <= 0.6) {

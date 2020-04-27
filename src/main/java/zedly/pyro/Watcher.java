@@ -11,6 +11,7 @@ import org.bukkit.block.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.*;
 import org.bukkit.event.block.*;
+import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.*;
 import static org.bukkit.event.inventory.InventoryType.SlotType.RESULT;
@@ -19,10 +20,12 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.util.Vector;
+import zedly.pyro.projectiles.AdvancedProjectile;
 
 public class Watcher implements Listener {
 
     private static final HashMap<Block, Integer> SIGN_POWER_CACHE = new HashMap<>();
+    private final HashMap<Location, String> advancedFireballsDispensing = new HashMap<>();
 
     @EventHandler // Firework sign created
     public boolean onSignChange(SignChangeEvent evt) {
@@ -52,6 +55,17 @@ public class Watcher implements Listener {
             }
         }
         return true;
+    }
+
+    @EventHandler // Advanced Projectiles in Dispensers & Paragraphers
+    public void onParticleDispenser(final BlockDispenseEvent evt) {
+        ItemStack stk = (ItemStack) evt.getItem();
+
+        // Advanced Projectiles in Dispensers
+        if (AdvancedProjectile.isAdvancedFireball(stk)) {
+            advancedFireballsDispensing.put(evt.getBlock().getLocation(), stk.getItemMeta().getLore().get(0));
+            return;
+        }
     }
 
     @EventHandler // Bang Ball is shot
@@ -279,6 +293,27 @@ public class Watcher implements Listener {
     @EventHandler // Remote tnt detonated
     public boolean onDetonate(final PlayerInteractEvent evt) throws Exception {
         Player player = evt.getPlayer();
+
+        if (evt.getAction() == RIGHT_CLICK_AIR
+                && Utilities.matchItemStack(evt.getPlayer().getInventory().getItemInMainHand(), Material.FIRE_CHARGE, null, null)
+                && evt.getPlayer().getInventory().getItemInMainHand().getItemMeta().hasLore()) {
+            ItemStack is = evt.getPlayer().getInventory().getItemInMainHand();
+            if (AdvancedProjectile.isAdvancedFireball(is)) {
+                SmallFireball sf = (SmallFireball) evt.getPlayer().getWorld().spawnEntity(evt.getPlayer().getLocation().add(new Vector(0, 1.62, 0)).add(evt.getPlayer().getLocation().getDirection().multiply(2.5)), EntityType.SMALL_FIREBALL);
+                sf.setVelocity(evt.getPlayer().getLocation().getDirection().multiply(1.5));
+                sf.setIsIncendiary(false);
+                AdvancedProjectile ap = AdvancedProjectile.create(is, sf);
+                Storage.advancedProjectiles.put(sf, ap);
+                if (is.getAmount() == 1) {
+                    evt.getPlayer().getInventory().setItemInMainHand(new ItemStack(AIR));
+                } else {
+                    is.setAmount(is.getAmount() - 1);
+                    evt.getPlayer().getInventory().setItemInMainHand(is);
+                }
+                return true;
+            }
+        }
+
         if ((evt.getAction() == Action.RIGHT_CLICK_BLOCK || evt.getAction() == Action.RIGHT_CLICK_AIR) && player.getInventory().getItemInMainHand() != null) {
             if (player.getInventory().getItemInMainHand().hasItemMeta() && player.getInventory().getItemInMainHand().getItemMeta().hasLore()) {
                 List<String> lore = player.getInventory().getItemInMainHand().getItemMeta().getLore();
@@ -287,8 +322,6 @@ public class Watcher implements Listener {
                     Block blk = evt.getClickedBlock();
                     if (blk != null) {
                         if (blk.getType().equals(TNT) && player.isSneaking()) {
-                            blk.setType(NETHERRACK);
-                            blk.setType(TNT);
                             if (Utilities.tryBreak(player, blk, false)) {
                                 if (Storage.remoteTnt.containsKey(ChatColor.stripColor(lore.get(1)))) {
                                     Storage.remoteTnt.get(ChatColor.stripColor(lore.get(1))).add(blk);
@@ -321,16 +354,13 @@ public class Watcher implements Listener {
                     }
                     for (Block block : blocks) {
                         if (block.getType() == TNT) {
+                            
+                            // BlockIgniteEvent
+                            
                             block.setType(AIR);
                             TNTPrimed ent = (TNTPrimed) block.getWorld().spawnEntity(block.getLocation(), EntityType.PRIMED_TNT);
                             ent.setYield(4);
                             ent.setFuseTicks(0);
-                            if (Storage.explodingBlocks.containsKey(block)) {
-                                if (Storage.explodingBlocks.get(block).params.get(0).contains("Firework TNT")) {
-                                    Storage.explodingBlocks.get(block).explode(ent);
-                                    ent.remove();
-                                }
-                            }
                         }
                     }
                     player.sendMessage(Storage.logo + " Detonated " + blocks.size() + " block(s)!");
@@ -343,6 +373,31 @@ public class Watcher implements Listener {
             }
         }
         return true;
+    }
+
+    @EventHandler // Advanced Projectiles & Lore Bows
+    public void onAdvancedProjectileHit(ProjectileHitEvent evt) {
+        // Advanced Projectiles
+        if (Storage.advancedProjectiles.containsKey(evt.getEntity())) {
+            Storage.advancedProjectiles.get(evt.getEntity()).impact();
+            Storage.advancedProjectiles.remove(evt.getEntity());
+        }
+    }
+
+    @EventHandler // Advanced Projectiles in Dispensers
+    public void onAdvancedProjectileLaunch(ProjectileLaunchEvent evt) {
+        Set<Location> toDie = new HashSet<>();
+        for (Location l : advancedFireballsDispensing.keySet()) {
+            if (l.distance(evt.getEntity().getLocation()) < 2) {
+                String loreString = advancedFireballsDispensing.get(l);
+                AdvancedProjectile ap = AdvancedProjectile.create(loreString, (SmallFireball) evt.getEntity());
+                Storage.advancedProjectiles.put(evt.getEntity(), ap);
+                toDie.add(l);
+            }
+        }
+        for (Location l : toDie) {
+            advancedFireballsDispensing.remove(l);
+        }
     }
 
     @EventHandler // Stops Easter eggs from being pickef up

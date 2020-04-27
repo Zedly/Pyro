@@ -6,6 +6,7 @@ import org.bukkit.block.*;
 import org.bukkit.entity.*;
 import static org.bukkit.Material.*;
 import org.bukkit.inventory.ItemStack;
+import zedly.pyro.projectiles.AdvancedProjectile;
 
 public class Storage {
 
@@ -45,19 +46,19 @@ public class Storage {
     public static final Material[] FW_COLOR_ICON_MATS = {RED_DYE, ORANGE_DYE, YELLOW_DYE, LIME_DYE,
         GREEN_DYE, LIGHT_BLUE_DYE, BLUE_DYE, LIGHT_GRAY_DYE, PINK_DYE, MAGENTA_DYE,
         PURPLE_DYE, CYAN_DYE, GRAY_DYE, BROWN_DYE, WHITE_DYE, BLACK_DYE};
-    
+
     public static final String[] FW_COLOR_FRIENDLY_NAMES = {
         "red", "orange", "yellow", "light_green",
         "dark_green", "light_blue", "dark_blue", "light_gray",
         "pink", "magenta", "purple", "aqua",
         "dark_gray", "brown", "white", "black"};
- 
+
     public static final int[][] FW_COLOR_RGB_RICH = {
         {255, 0, 0}, {255, 127, 0}, {255, 255, 0}, {0, 255, 0},
         {0, 127, 0}, {0, 255, 255}, {0, 0, 255}, {127, 127, 127},
         {255, 0, 127}, {255, 0, 255}, {0, 127, 127}, {0, 127, 127},
         {63, 63, 63}, {127, 63, 0}, {255, 255, 255}, {0, 0, 0}};
-    
+
     public static final int[][] FW_COLOR_RGB_MOJANG = {
         {179, 49, 44}, {235, 136, 68}, {222, 207, 42}, {65, 205, 52},
         {59, 81, 26}, {102, 137, 211}, {37, 49, 146}, {171, 171, 171},
@@ -65,7 +66,7 @@ public class Storage {
         {67, 67, 67}, {81, 48, 26}, {240, 240, 240}, {30, 27, 27}};
 
     //Collections
-    public static final HashMap<String, Boolean> recipes = new HashMap<>();
+    public static final HashMap<Entity, AdvancedProjectile> advancedProjectiles = new HashMap<>();
     public static final HashSet<Snowball> bangBalls = new HashSet<>();
     public static final HashMap<Integer, TNTExplosion> explodingEntities = new HashMap<>();
     public static final HashMap<Block, TNTExplosion> explodingBlocks = new HashMap<>();

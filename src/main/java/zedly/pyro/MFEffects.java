@@ -24,7 +24,7 @@ public class MFEffects implements Runnable {
         if (it.hasNext()) {
             glowViewers.clear();
             for (Player p : Bukkit.getOnlinePlayers()) {
-                if (p.hasPermission("pyro.egg")) {
+                if (p.hasPermission("pyro.eegg")) {
                     glowViewers.add(p);
                 }
             }

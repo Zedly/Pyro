@@ -403,5 +403,43 @@ public class Utilities {
             return true;
         }
     }
+    
+    /**
+     * Match an item stack against a number of criteria. Eliminates huge chains
+     * of null checks
+     *
+     * @param is the item stack to match
+     * @param mat the material to look for. null if irrelevant
+     * @param durability the damage value to look for. -1 if irrelevant
+     * @param name the name the item must have. null if irrelevant
+     * @param lore a line of lore that must be contained in the item stack. null
+     * if irrelevant
+     * @return true if the item stack matches all specified criteria
+     */
+    public static boolean matchItemStack(ItemStack is, Material mat, String name, String lore) {
+        if (is == null) {
+            return false;
+        }
+        if (mat != null && is.getType() != mat) {
+            return false;
+        }
+        if ((name != null || lore != null) && !is.hasItemMeta()) {
+            return false;
+        }
+        if (name != null && !(is.getItemMeta().hasDisplayName() || !is.getItemMeta().getDisplayName().equals(name))) {
+            return false;
+        }
+        if (lore != null) {
+            if (is.getItemMeta().hasLore()) {
+                for (String loreLine : is.getItemMeta().getLore()) {
+                    if (loreLine.equals(lore)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+        return true;
+    }
 
 }

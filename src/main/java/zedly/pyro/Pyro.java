@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Item;
 import org.bukkit.plugin.java.JavaPlugin;
+import zedly.pyro.command.CommandDelegator;
 
 public class Pyro extends JavaPlugin {
 
@@ -16,16 +17,6 @@ public class Pyro extends JavaPlugin {
     public void onEnable() {
         Storage.pyro = this;
         this.saveDefaultConfig();
-        for (int x = this.getConfig().getList("Recipes").size() - 1; x >= 0; x--) {
-            String str = "" + this.getConfig().getList("Recipes").get(x);
-            boolean b;
-            try {
-                b = Boolean.parseBoolean(str.split("=")[1].replace("}", ""));
-            } catch (NumberFormatException e) {
-                b = true;
-            }
-            Storage.recipes.put(str.split("=")[0].replace("{", ""), b);
-        }
         getServer().getPluginManager().registerEvents(new Watcher(), this);
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new HFEffects(), 0, 1);
         getServer().getScheduler().scheduleSyncRepeatingTask(this, new PlayParty(), 0, 3);
@@ -38,16 +29,16 @@ public class Pyro extends JavaPlugin {
             }
         }
         Storage.colorString = col;
-        if (Storage.recipes.get("Remote Detonator")) {
+        if (getConfig().getBoolean("recipes.remote-detonator", false)) {
             Recipes.remotes();
         }
-        if (Storage.recipes.get("Rainbow Snowball")) {
-            Recipes.snowballs();
+        if (getConfig().getBoolean("recipes.rainbow-snowballs", false)) {
+            Recipes.rainbowSnowballs();
         }
-        if (Storage.recipes.get("New Color Arrow")) {
+        if (getConfig().getBoolean("recipes.color-arrows", false)) {
             Recipes.colorArrow();
         }
-        if (Storage.recipes.get("Bang Snowball")) {
+        if (getConfig().getBoolean("recipes.bang-snowballs", false)) {
             Recipes.bang();
         }
     }
@@ -63,7 +54,6 @@ public class Pyro extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String commandlabel, String[] args) {
-        CommandProcessor.run(sender, command, commandlabel, args);
-        return true;
+        return CommandDelegator.onCommand(sender, command.getLabel().toLowerCase(), args);
     }
 }

@@ -18,7 +18,7 @@ public class CraftingGUI {
     public static void craftArrow(final InventoryView view, final Set<Integer> slots, final Player p,
             final boolean canCraft, final boolean isShift) {
         // Check if Color Arrow Recipes are enabled
-        if (!Storage.recipes.get("Color Arrow")) {
+        if (!Storage.pyro.getConfig().getBoolean("recipes.color-arrows", false)) {
             return;
         }
 
@@ -203,10 +203,10 @@ public class CraftingGUI {
                 if (counter != 2) {
                     return;
                 }
-                if (!Storage.recipes.get("Firework TNT") && tnt) {
+                if (!Storage.pyro.getConfig().getBoolean("recipes.firework-tnt", false) && tnt) {
                     return;
                 }
-                if (!Storage.recipes.get("Firework Sign") && sign) {
+                if (!Storage.pyro.getConfig().getBoolean("recipes.firework-tnt", false) && sign) {
                     return;
                 }
                 CraftedFirework f = new CraftedFirework();

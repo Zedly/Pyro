@@ -3,16 +3,36 @@ main: zedly.pyro.Pyro
 version: 0.6.1
 api-version: 1.14
 commands:
-  cannon:
-    description: Fires an exploding item
-    usage: /cannon <Item ID/Item Name>:<MaterialData?>
-  color:
+  colorarrow:
+    permission: pyro.colorarrow
     description: Spawns color arrows
     usage: /color <color>/<r,g,b>
-  py:
-    description: Use Pyro commands
-    usage: /py
-  remote:
+  eegg:
+    permission: pyro.eegg
+    description: Drops the item you are holding disguised as a monster egg or a chest
+    usage: /eegg
+  eeggs:
+    permission: pyro.eeggs  
+    description: List how many easter eggs / christmas presents are left
+    usage: /eeggs
+  firework:
+    permission: pyro.firework
+    description: A graphical interface for crfeating firework items
+    usage: /firework
+  party:
+    permission: pyro.party
+    description: Continuously launches some fireworks around you or the entire server
+    usage: /party (all)
+  rainboom:
+    permission: pyro.rainboom
+    description: Produces a colorful firework trail when you fly
+    usage: /rainboom
+  retrieveeggs:
+    permission: pyro.retrieveeggs
+    description: Brings back all undiscovered easter eggs
+    usage: /retrieveeggs
+  rtnt:
+    permission: pyro.rtnt
     description: Fires an exploding item
     usage: /remote <add/del> <channel name>
 permissions:
@@ -21,19 +41,57 @@ permissions:
     children:
       pyro.cannon: true
       pyro.colorarrow: true
-      pyro.egg: true
+      pyro.eegg: true
+      pyro.eeggs: true
       pyro.firework: true
       pyro.party: true
       pyro.partyglobal: true
-      pyro.remote: true
+      pyro.rainboom: true
+      pyro.retrieveeggs: true
+      pyro.rtnt: true
+      pyro.item.*: true
+      
+  pyro.item.*:
+    children:
+      pyro.item.repulsor: true
+      pyro.item.missile: true
+      pyro.item.destructor: true
+      pyro.item.spark: true
+      pyro.item.signal: true
+      pyro.item.bangball: true
+      pyro.item.rainbowsnowball: true
+      pyro.item.remotetrigger: true
+      pyro.item.fireworktnt: true
+     
+  pyro.item.repulsor:
+    default: false
+  pyro.item.missile:
+    default: false
+  pyro.item.destructor:
+    default: false
+  pyro.item.spark:
+    default: false
+  pyro.item.signal:
+    default: false
+  pyro.item.bangball:
+    default: false
+  pyro.item.rainbowsnowball:
+    default: false
+  pyro.item.remotetrigger:
+    default: false
+  pyro.item.fireworktnt:
+    default: false
+
   pyro.cannon:
     description: Fires an exploding item.
     default: false
   pyro.colorarrow:
     description: Allows editing or creating color arrows.
     default: false
-  pyro.egg:
+  pyro.eegg:
     description: Drops the held item, disguised as a random mob egg.
+    default: false
+  pyro.eeggs:
     default: false
   pyro.firework:
     description: Allows creating Firework signs.
@@ -44,6 +102,10 @@ permissions:
   pyro.partyglobal:
     description: Allows usage of </py party global> to start or stop a global party.
     default: false
-  pyro.remote:
+  pyro.rainboom:
+    default: false
+  pyro.retrieveeggs:
+    default: false
+  pyro.rtnt:
     description: Allows creating remote controlled TNT and TNT detonators.
     default: false
