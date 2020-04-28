@@ -6,8 +6,6 @@
 package zedly.pyro.features;
 
 import java.util.HashMap;
-import java.util.Map.Entry;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -17,7 +15,6 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +27,7 @@ import zedly.pyro.FireworkEffectPlayer;
 public class ColorArrows extends FeatureClass {
 
     public static final ColorArrows INSTANCE = new ColorArrows();
-    public static final HashMap<Projectile, Color> colorArrows = new HashMap<>();
+    private static final HashMap<Projectile, Color> colorArrows = new HashMap<>();
 
     private ColorArrows() {
     }

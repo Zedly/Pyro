@@ -10,7 +10,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 import zedly.pyro.Storage;
@@ -54,7 +53,7 @@ public class EasterEggs extends FeatureClass {
                 it.remove();
                 ItemStack is = egg.getValue();
                 for (Player p : glowViewers) {
-                    p.sendMessage(Storage.logo + ChatColor.YELLOW + "An egg containing "
+                    p.sendMessage(Storage.logo + ChatColor.YELLOW + " An egg containing "
                             + is.getType() + " has been lost");
                 }
                 continue;
@@ -110,7 +109,6 @@ public class EasterEggs extends FeatureClass {
                 item.remove();
             }
         }
-        // Else If transient, delete
         return;
     }
 
