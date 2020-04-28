@@ -1,5 +1,6 @@
 package zedly.pyro;
 
+import zedly.pyro.features.RainbowSnowballs;
 import java.util.*;
 import org.bukkit.*;
 import static org.bukkit.Material.*;
@@ -9,7 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class Recipes {
 
-    public static void rainbowSnowballs() {
+    public static void registerRainbowRecipe() {
         ItemStack rainbowSnowball = new ItemStack(SNOWBALL, 1);
         ItemMeta meta = rainbowSnowball.getItemMeta();
         ArrayList<String> lore = new ArrayList<>();
@@ -18,14 +19,14 @@ public class Recipes {
         meta.setLore(lore);
         rainbowSnowball.setItemMeta(meta);
         ShapelessRecipe recipe = new ShapelessRecipe(new NamespacedKey(Storage.pyro, "rainbow_snowball"), rainbowSnowball);
-        for (Material m : Storage.rainbowGlass) {
+        for (Material m : RainbowSnowballs.RAINBOW_GLASS) {
             recipe.addIngredient(m);
         }
         recipe.addIngredient(SNOWBALL);
         Bukkit.getServer().addRecipe(recipe);
     }
 
-    public static void remotes() {
+    public static void registerRemoteRecipe() {
         ItemStack remote = new ItemStack(NAME_TAG, 1);
         ItemMeta meta = remote.getItemMeta();
         meta.setDisplayName(ChatColor.WHITE + "<<--->>");
@@ -38,7 +39,7 @@ public class Recipes {
         Bukkit.getServer().addRecipe(recipe);
     }
 
-    public static void colorArrow() {
+    public static void registerColorArrowRecipe() {
         ItemStack arrow = new ItemStack(ARROW, 1);
         ItemMeta meta = arrow.getItemMeta();
         ArrayList<String> lore = new ArrayList<>();
@@ -51,7 +52,7 @@ public class Recipes {
         Bukkit.getServer().addRecipe(recipe);
     }
 
-    public static void bang() {
+    public static void registerBangRecipe() {
         ItemStack is = new ItemStack(SNOWBALL, 4);
         ItemMeta meta = is.getItemMeta();
         ArrayList<String> lore = new ArrayList<>();

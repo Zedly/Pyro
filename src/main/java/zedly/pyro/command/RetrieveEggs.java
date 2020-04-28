@@ -7,6 +7,7 @@ package zedly.pyro.command;
 
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import zedly.pyro.features.EasterEggs;
 import zedly.pyro.Storage;
 
 /**
@@ -17,10 +18,10 @@ public class RetrieveEggs extends PlayerCommand {
 
     @Override
     boolean onCommand(Player player, String[] args) {
-        for (Item itemEnt : Storage.eastereggs.keySet()) {
+        for (Item itemEnt : EasterEggs.eastereggs.keySet()) {
             itemEnt.teleport(player);
         }
-        player.sendMessage(Storage.logo + " " + Storage.eastereggs.size() + " egg(s) returned!");
+        player.sendMessage(Storage.logo + " " + EasterEggs.eastereggs.size() + " egg(s) returned!");
         return true;
     }
 

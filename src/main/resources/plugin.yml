@@ -62,6 +62,7 @@ permissions:
       pyro.item.rainbowsnowball: true
       pyro.item.remotetrigger: true
       pyro.item.fireworktnt: true
+      pyro.item.fireworksign: true
      
   pyro.item.repulsor:
     default: false

@@ -7,6 +7,7 @@ package zedly.pyro.command;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import zedly.pyro.features.EasterEggs;
 import zedly.pyro.Storage;
 
 /**
@@ -17,7 +18,7 @@ public class EEggs extends Command {
 
     @Override
     public boolean onCommand(CommandSender sender, String[] args) {
-        sender.sendMessage(Storage.logo + " " + Storage.eastereggs.size() + " egg(s) remaining!");
+        sender.sendMessage(Storage.logo + " " + EasterEggs.eastereggs.size() + " egg(s) remaining!");
         return true;
     }
 

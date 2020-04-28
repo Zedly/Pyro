@@ -5,6 +5,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.SmallFireball;
 import org.bukkit.util.Vector;
+import zedly.pyro.features.AdvancedProjectiles;
 import zedly.pyro.FireworkEffectPlayer;
 import zedly.pyro.Storage;
 
@@ -38,12 +39,12 @@ public class ProjectileSpark extends AdvancedProjectile {
             SmallFireball sf1 = (SmallFireball) sf.getWorld().spawnEntity(sf.getLocation(), EntityType.SMALL_FIREBALL);
             sf1.setIsIncendiary(false);
             sf1.setVelocity(new Vector(Storage.rnd.nextGaussian(), Storage.rnd.nextGaussian(), Storage.rnd.nextGaussian()));
-            Storage.advancedProjectiles.put(sf1, new ProjectileSparkle(sf1, color));
+            AdvancedProjectiles.advancedProjectiles.put(sf1, new ProjectileSparkle(sf1, color));
         }
         sf.remove();
     }
 
     static {
-        bu = FireworkEffect.builder().withColor(org.bukkit.Color.fromRGB(Storage.rainbowcolors[1])).with(FireworkEffect.Type.BALL);
+        bu = FireworkEffect.builder().withColor(org.bukkit.Color.fromRGB(Storage.RAINBOW_COLORS[1])).with(FireworkEffect.Type.BALL);
     }
 }

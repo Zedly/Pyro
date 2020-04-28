@@ -29,6 +29,6 @@ public class ProjectileSignal extends AdvancedProjectile {
     }
 
     static {
-        bu = FireworkEffect.builder().withColor(org.bukkit.Color.fromRGB(Storage.rainbowcolors[0])).trail(true).with(FireworkEffect.Type.BALL_LARGE);
+        bu = FireworkEffect.builder().withColor(org.bukkit.Color.fromRGB(Storage.RAINBOW_COLORS[0])).trail(true).with(FireworkEffect.Type.BALL_LARGE);
     }
 }

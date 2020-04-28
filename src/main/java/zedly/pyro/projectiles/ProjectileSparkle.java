@@ -14,7 +14,7 @@ public class ProjectileSparkle extends AdvancedProjectile {
         super(sf);
         tick = 2 + Storage.rnd.nextInt(3);
         bu1 = FireworkEffect.builder()
-                .withColor(org.bukkit.Color.fromRGB(Storage.rainbowcolors[color]))
+                .withColor(org.bukkit.Color.fromRGB(Storage.RAINBOW_COLORS[color]))
                 .with(FireworkEffect.Type.BALL_LARGE);
         sf.setVelocity(sf.getVelocity().multiply(1.3));
     }
@@ -35,6 +35,6 @@ public class ProjectileSparkle extends AdvancedProjectile {
     }
 
     static {
-        bu = FireworkEffect.builder().withColor(org.bukkit.Color.fromRGB(Storage.rainbowcolors[2])).trail(true).with(FireworkEffect.Type.BALL);
+        bu = FireworkEffect.builder().withColor(org.bukkit.Color.fromRGB(Storage.RAINBOW_COLORS[2])).trail(true).with(FireworkEffect.Type.BALL);
     }
 }

@@ -16,11 +16,11 @@ public class Rainboom extends PlayerCommand {
 
     @Override
     boolean onCommand(Player player, String[] args) {
-        if (zedly.pyro.Rainboom.isEnabledFor(player)) {
-            zedly.pyro.Rainboom.disableFor(player);
+        if (isEnabledFor(player)) {
+            disableFor(player);
             player.sendMessage(Storage.logo + " Rainboom disabled!");
         } else {
-            zedly.pyro.Rainboom.enableFor(player);
+            enableFor(player);
             player.sendMessage(Storage.logo + " Rainboom enabled!");
         }
         return true;
@@ -35,5 +35,16 @@ public class Rainboom extends PlayerCommand {
     public String getDescription() {
         return "Produces a colorful firework trail when you fly";
     }
+    
+    public static boolean isEnabledFor(Player player) {
+        return zedly.pyro.features.Rainboom.rainboomPlayers.contains(player);
+    }
 
+    public static void enableFor(Player player) {
+        zedly.pyro.features.Rainboom.rainboomPlayers.add(player);
+    }
+
+    public static void disableFor(Player player) {
+        zedly.pyro.features.Rainboom.rainboomPlayers.remove(player);
+    }
 }

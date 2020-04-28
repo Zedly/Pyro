@@ -7,7 +7,7 @@ package zedly.pyro.command;
 
 import org.bukkit.entity.Player;
 import zedly.pyro.CraftedFirework;
-import zedly.pyro.CraftingGUI;
+import zedly.pyro.features.CraftingGUI;
 import zedly.pyro.Storage;
 
 /**
@@ -18,7 +18,7 @@ public class Firework extends PlayerCommand {
 
     @Override
     boolean onCommand(Player player, String[] args) {
-        Storage.inventories.put((Player) player, new CraftedFirework());
+        CraftingGUI.inventories.put((Player) player, new CraftedFirework());
         CraftingGUI.updatePage(1, (Player) player);
         return true;
     }

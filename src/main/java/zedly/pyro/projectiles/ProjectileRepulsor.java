@@ -33,6 +33,6 @@ public class ProjectileRepulsor extends AdvancedProjectile {
     }
 
     static {
-        bu = FireworkEffect.builder().withColor(org.bukkit.Color.fromRGB(Storage.rainbowcolors[2])).trail(true).with(FireworkEffect.Type.BALL);
+        bu = FireworkEffect.builder().withColor(org.bukkit.Color.fromRGB(Storage.RAINBOW_COLORS[2])).trail(true).with(FireworkEffect.Type.BALL);
     }
 }

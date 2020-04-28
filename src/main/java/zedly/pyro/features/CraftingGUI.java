@@ -1,21 +1,92 @@
-package zedly.pyro;
+package zedly.pyro.features;
 
 import java.util.*;
 import org.apache.commons.lang.*;
 import org.bukkit.*;
 import static org.bukkit.Material.*;
 import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.InventoryType;
+import static org.bukkit.event.inventory.InventoryType.SlotType.RESULT;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
+import zedly.pyro.CraftedFirework;
+import zedly.pyro.Storage;
+import zedly.pyro.Utilities;
 
-public class CraftingGUI {
+public class CraftingGUI extends FeatureClass {
 
+    public static final CraftingGUI INSTANCE = new CraftingGUI();
+    
     private static final Material[] accepted = new Material[]{GUNPOWDER, SUGAR, REDSTONE, GLOWSTONE_DUST, RED_DYE, ORANGE_DYE, YELLOW_DYE, LIME_DYE,
         GREEN_DYE, LIGHT_BLUE_DYE, BLUE_DYE, LIGHT_GRAY_DYE, PINK_DYE, MAGENTA_DYE,
         PURPLE_DYE, CYAN_DYE, GRAY_DYE, BROWN_DYE, WHITE_DYE, BLACK_DYE, PRISMARINE_SHARD, FLINT, QUARTZ, WATER_BUCKET, SPONGE};
+    public static final HashMap<Player, CraftedFirework> inventories = new HashMap<>();
+    
+    private CraftingGUI() {
+    }
+    
+    @EventHandler // Links to lore crafting (craftArrow/craftChromo)
+    public void onCraft(InventoryDragEvent evt) {
+        if (!evt.getInventory().getType().equals(InventoryType.WORKBENCH) || evt.isCancelled()) {
+            return;
+        }
+        craftArrow(evt.getView(), evt.getInventorySlots(), (Player) evt.getWhoClicked(), false, false);
+        craftFireworkObject(evt.getView(), evt.getInventorySlots(), (Player) evt.getWhoClicked(), false);
+    }
+
+    @EventHandler // Links to lore crafting (craftArrow/craftChromo)
+    public void onCraft(final InventoryClickEvent evt) {
+        if ((evt.getInventory().getType() != InventoryType.WORKBENCH && evt.getInventory().getType() != InventoryType.CRAFTING) || evt.isCancelled()) {
+            return;
+        }
+        boolean canCraft = false;
+        if (evt.getSlotType().equals(RESULT)) {
+            canCraft = true;
+        }
+        Set<Integer> slot = new HashSet<>();
+        slot.add(evt.getSlot());
+
+        craftArrow(evt.getView(), slot, (Player) evt.getWhoClicked(), canCraft, evt.isShiftClick());
+        craftFireworkObject(evt.getView(), slot, (Player) evt.getWhoClicked(), canCraft);
+    }
+
+    @EventHandler // Firework Inventory
+    public boolean onFireworkClick(InventoryClickEvent evt) {
+        if (evt.getInventory().getType() == InventoryType.CHEST && evt.getView().getTitle().contains(ChatColor.DARK_RED + "Firework")) {
+            try {
+                int page = Integer.parseInt(evt.getView().getTitle().split("/4")[0].split(" : ")[2]);
+                int oldPage = page;
+                if (evt.getSlot() == 53) {
+                    page++;
+                } else if (evt.getSlot() == 45) {
+                    page--;
+                }
+                if (page < 1) {
+                    page = 4;
+                } else if (page > 4) {
+                    page = 1;
+                }
+                if (oldPage != page) {
+                    CraftingGUI.updatePage(page, (Player) evt.getWhoClicked());
+                }
+                if (evt.getView().getTitle().contains(ChatColor.DARK_RED + "Firework") && evt.getRawSlot() < 54) {
+                    evt.setCancelled(true);
+                    CraftingGUI.recieveClick(evt.getSlot(), page, (Player) evt.getWhoClicked(), evt.getInventory(), evt.isShiftClick());
+                }
+            } catch (Exception e) {
+            }
+        }
+        return true;
+    }
+
+    
     
     // Color Arrow Crafting
-    public static void craftArrow(final InventoryView view, final Set<Integer> slots, final Player p,
+    private static void craftArrow(final InventoryView view, final Set<Integer> slots, final Player p,
             final boolean canCraft, final boolean isShift) {
         // Check if Color Arrow Recipes are enabled
         if (!Storage.pyro.getConfig().getBoolean("recipes.color-arrows", false)) {
@@ -185,7 +256,7 @@ public class CraftingGUI {
     }// Full Inventory Loss
 
     // Firework Sign/TNT Crafting
-    public static void craftFireworkObject(final InventoryView view, final Set<Integer> slots, final Player p, final boolean canCraft) {
+    private static void craftFireworkObject(final InventoryView view, final Set<Integer> slots, final Player p, final boolean canCraft) {
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Storage.pyro, new Runnable() {
             public void run() {
                 FireworkMeta fwm = null;
@@ -260,7 +331,7 @@ public class CraftingGUI {
 
     }
 
-    public static void remove(InventoryView view, List<ItemStack> realInv, int amount) {
+    private static void remove(InventoryView view, List<ItemStack> realInv, int amount) {
         for (int i = 0; i < 9; i++) {
             ItemStack stk = realInv.get(i).clone();
             stk.setAmount(realInv.get(i).getAmount() - amount);
@@ -272,7 +343,7 @@ public class CraftingGUI {
         }
     }
 
-    public static void removeItem(Player player, ItemStack stk, int amount) {
+    private static void removeItem(Player player, ItemStack stk, int amount) {
         Inventory inv = player.getInventory();
         for (int i = 0; i < inv.getSize(); i++) {
             if (inv.getItem(i) != null && inv.getItem(i).getType() == stk.getType()) {
@@ -294,7 +365,7 @@ public class CraftingGUI {
 
     // Opens a firework inventory and updates pages
     public static void updatePage(int page, Player player) {
-        CraftedFirework fwk = Storage.inventories.get(player);
+        CraftedFirework fwk = inventories.get(player);
         String id = "";
         switch (page) {
             case 1:
@@ -453,8 +524,8 @@ public class CraftingGUI {
     }
 
     // Update Player view and update firework status
-    public static void recieveClick(int slot, int page, Player player, Inventory inventory, boolean shift) {
-        CraftedFirework fwk = Storage.inventories.get(player);
+    private static void recieveClick(int slot, int page, Player player, Inventory inventory, boolean shift) {
+        CraftedFirework fwk = inventories.get(player);
         switch (page) {
             case 1:
             case 2:
